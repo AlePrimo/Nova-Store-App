@@ -13,10 +13,10 @@
 	</parent>
 
 	<groupId>com.aleprimo</groupId>
-	<artifactId>plantilla-backend</artifactId>
+	<artifactId>nova-store-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>plantilla-backend</name>
-	<description>Proyecto Java backend donde creamos una plantilla reutilizable.</description>
+	<name>Nova Store App</name>
+	<description>Proyecto donde creamos una plataforma e-commerce.</description>
 
 	<properties>
 		<java.version>21</java.version>
