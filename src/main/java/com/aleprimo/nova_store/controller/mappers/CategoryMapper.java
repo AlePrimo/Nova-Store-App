@@ -32,4 +32,10 @@ public class CategoryMapper {
     }
 
     public void updateEntityFromDto(CategoryRequestDTO dto, Category category) {
-        if (dto == null || category == n
+        if (dto == null || category == null) return;
+
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        category.setIsActive(dto.getIsActive());
+    }
+}
