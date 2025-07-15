@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.aleprimo.plantilla-backend' is invalid and this project uses 'com.aleprimo.plantilla_backend' instead.
+* The original package name 'com.aleprimo.plantilla-backend' is invalid and this project uses 'com.aleprimo.nova_store' instead.
 
 # Getting Started
 
