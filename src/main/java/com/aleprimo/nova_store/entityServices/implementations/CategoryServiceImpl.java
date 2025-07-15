@@ -1,8 +1,8 @@
 package com.aleprimo.nova_store.entityServices.implementations;
 
 import com.aleprimo.nova_store.controller.mappers.CategoryMapper;
-import com.aleprimo.nova_store.dto.CategoryRequestDTO;
-import com.aleprimo.nova_store.dto.CategoryResponseDTO;
+import com.aleprimo.nova_store.dto.category.CategoryRequestDTO;
+import com.aleprimo.nova_store.dto.category.CategoryResponseDTO;
 import com.aleprimo.nova_store.models.Category;
 import com.aleprimo.nova_store.persistence.CategoryDAO;
 import com.aleprimo.nova_store.repository.CategoryRepository;

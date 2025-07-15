@@ -1,7 +1,7 @@
 package com.aleprimo.nova_store.entityServices;
 
-import com.aleprimo.nova_store.dto.CategoryRequestDTO;
-import com.aleprimo.nova_store.dto.CategoryResponseDTO;
+import com.aleprimo.nova_store.dto.category.CategoryRequestDTO;
+import com.aleprimo.nova_store.dto.category.CategoryResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
