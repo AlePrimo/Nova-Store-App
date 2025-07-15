@@ -1,5 +1,6 @@
 package com.aleprimo.nova_store.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,9 +27,19 @@ public class Category {
     Boolean isActive;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
-
+    @Builder.Default
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

@@ -20,10 +20,11 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @Column(nullable = false, length = 100)
     String name;
     @Column(columnDefinition = "TEXT")
     String description;
-    @Column(name = "short_description")
+    @Column(name = "short_description", length = 255)
     String shortDescription;
     BigDecimal price;
     Integer stock;
@@ -37,6 +38,19 @@ public class Product {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
 
 
 }
