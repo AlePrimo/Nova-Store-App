@@ -1,7 +1,7 @@
 package com.aleprimo.nova_store.controller.mappers;
 
-import com.aleprimo.nova_store.dto.ProductRequestDTO;
-import com.aleprimo.nova_store.dto.ProductResponseDTO;
+import com.aleprimo.nova_store.dto.product.ProductRequestDTO;
+import com.aleprimo.nova_store.dto.product.ProductResponseDTO;
 import com.aleprimo.nova_store.models.Category;
 import com.aleprimo.nova_store.models.Product;
 import org.springframework.stereotype.Component;
