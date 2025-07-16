@@ -40,6 +40,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(Long id) {
-this.roleDAO.delete(id);
+        this.roleDAO.delete(id);
     }
 }

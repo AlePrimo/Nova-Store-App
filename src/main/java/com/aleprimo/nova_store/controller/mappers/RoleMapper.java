@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RoleMapper {
 
-    public RoleDTO toDto(Role role){
+    public RoleDTO toDto(Role role) {
         if (role == null) {
             return null;
         }
@@ -19,8 +19,7 @@ public class RoleMapper {
     }
 
 
-
-    public Role toEntity(RoleDTO roleDTO){
+    public Role toEntity(RoleDTO roleDTO) {
         if (roleDTO == null) {
             return null;
         }
@@ -30,8 +29,6 @@ public class RoleMapper {
                 .name(roleDTO.getName())
                 .build();
     }
-
-
 
 
 }

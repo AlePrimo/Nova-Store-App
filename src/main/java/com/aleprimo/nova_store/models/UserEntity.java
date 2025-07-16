@@ -35,9 +35,8 @@ public class UserEntity extends Auditable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    Set<Role>  roles;
+    Set<Role> roles;
     Boolean enabled;
-
 
 
 }

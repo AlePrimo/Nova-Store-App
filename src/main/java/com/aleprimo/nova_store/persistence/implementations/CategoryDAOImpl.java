@@ -1,4 +1,5 @@
 package com.aleprimo.nova_store.persistence.implementations;
+
 import com.aleprimo.nova_store.models.Category;
 import com.aleprimo.nova_store.persistence.CategoryDAO;
 import com.aleprimo.nova_store.repository.CategoryRepository;

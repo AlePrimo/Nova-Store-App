@@ -19,5 +19,5 @@ public class AuditConfig {
                 .map(Authentication::getName)
                 .or(() -> Optional.of("test-user"));
 
-}
+    }
 }

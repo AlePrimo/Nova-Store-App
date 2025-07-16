@@ -8,9 +8,9 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
 import java.util.Set;
-
 
 
 @Getter
@@ -58,7 +58,6 @@ public class UserDTO {
 
     @Schema(description = "Fecha de última modificación", example = "2025-07-01T10:15:00")
     private LocalDateTime lastModifiedDate;
-
 
 
 }

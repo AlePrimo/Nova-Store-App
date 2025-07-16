@@ -13,14 +13,23 @@ import java.util.Optional;
 public interface UserDAO {
 
     UserEntity save(UserEntity user);
+
     Optional<UserEntity> findById(Long id);
+
     Page<UserEntity> findAll(Pageable pageable);
+
     void deleteById(Long id);
+
     Optional<UserEntity> findByUsername(String username);
+
     Optional<UserEntity> findByEmail(String email);
+
     boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
+
     Page<UserEntity> findByEnabledTrue(Pageable pageable);
+
     @Query("SELECT u FROM UserEntity u JOIN u.roles r WHERE r.name = :roleName")
     List<UserEntity> findByRoleName(@Param("roleName") RoleName roleName);
 

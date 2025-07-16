@@ -24,13 +24,14 @@ public interface ProductService {
 
 
     ProductResponseDTO createProduct(ProductRequestDTO dto);
+
     ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto);
+
     Optional<Product> getProductEntityBySku(String sku);
+
     Optional<ProductResponseDTO> getBySku(String sku);
 
     void deleteById(Long id);
-
-
 
 
 }

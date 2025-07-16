@@ -20,5 +20,6 @@ public interface ProductDAO {
     Page<Product> findByCategoryIdAndNameContaining(Long categoryId, String name, Pageable pageable);
 
     Optional<Product> findBySku(String sku);
+
     void deleteById(Long id);
 }

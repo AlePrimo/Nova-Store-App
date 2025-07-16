@@ -32,11 +32,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-
-
     @Override
     public UserEntity save(UserEntity user) {
-        if(this.userDAO.existsByUsername(user.getUsername())){
+        if (this.userDAO.existsByUsername(user.getUsername())) {
             throw new UsernameAlreadyExistsException(user.getUsername());
         }
 
@@ -57,13 +55,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserEntity> findAll(Pageable pageable){
+    public Page<UserEntity> findAll(Pageable pageable) {
         return this.userDAO.findAll(pageable);
     }
 
     @Override
     public void deleteById(Long id) {
-this.userDAO.deleteById(id);
+        this.userDAO.deleteById(id);
     }
 
     @Override

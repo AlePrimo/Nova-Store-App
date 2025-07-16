@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError(
                 HttpStatus.BAD_REQUEST.value(),
                 "Error de validación: " + errores,
-                request.getRequestURI() , LocalDateTime.now()
+                request.getRequestURI(), LocalDateTime.now()
         );
 
         return ResponseEntity.badRequest().body(apiError);

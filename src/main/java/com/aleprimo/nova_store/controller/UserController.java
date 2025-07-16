@@ -95,8 +95,6 @@ public class UserController {
     }
 
 
-
-
     @Operation(summary = "Listar usuarios por rol")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuarios encontrados con ese rol"),
@@ -153,7 +151,6 @@ public class UserController {
     }
 
 
-
     @Operation(summary = "Listar usuarios habilitados con paginación")
     @ApiResponse(responseCode = "200", description = "Página de usuarios habilitados obtenida correctamente")
     @GetMapping("/enabled")
@@ -175,9 +172,6 @@ public class UserController {
                 .map(userMapper::toDto);
         return ResponseEntity.ok(users);
     }
-
-
-
 
 
 }
