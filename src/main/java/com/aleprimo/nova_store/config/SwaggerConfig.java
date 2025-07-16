@@ -13,7 +13,7 @@ public class SwaggerConfig {
     public OpenAPI apiInfo() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("🔐 API REST - Gestión de Usuarios y Roles con Spring Boot")
+                        .title("🔐 API REST - Pagina de e-commerce")
                         .description("""
             Esta API REST permite gestionar usuarios, autenticación y roles de manera segura, 
             utilizando Spring Boot, JWT, y buenas prácticas de arquitectura.
@@ -29,7 +29,7 @@ public class SwaggerConfig {
                         .contact(new Contact()
                                 .name("Alejandro Carullo")
                                 .email("alejandrojuliancarullo@gmail.com")
-                                .url("https://github.com/AlePrimo/Plantilla-Backend")));
+                                .url("https://github.com/AlePrimo/Nova-Store-App")));
     }
 
     @Bean

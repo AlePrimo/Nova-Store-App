@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 
 @Service
@@ -54,10 +55,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO getBySku(String sku) {
-        Product product = productDAO.findBySku(sku)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con SKU: " + sku));
-        return productMapper.toDto(product);
+    public Optional<Product> getProductEntityBySku(String sku) {
+        return productDAO.findBySku(sku);
+    }
+
+    @Override
+    public Optional<ProductResponseDTO> getBySku(String sku) {
+        return productDAO.findBySku(sku)
+                .map(productMapper::toDto);
     }
 
     @Override
@@ -84,4 +89,12 @@ public class ProductServiceImpl implements ProductService {
         Product updated = productRepository.save(product);
         return productMapper.toDto(updated);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        productDAO.deleteById(id);
+    }
+
 }
+
+

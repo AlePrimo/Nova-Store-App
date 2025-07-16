@@ -47,4 +47,9 @@ public class ProductDAOImpl implements ProductDAO {
     public Optional<Product> findBySku(String sku) {
         return this.productRepository.findBySku(sku);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        this.productRepository.deleteById(id);
+    }
 }
