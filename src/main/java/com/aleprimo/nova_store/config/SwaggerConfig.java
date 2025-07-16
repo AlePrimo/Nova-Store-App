@@ -1,35 +1,54 @@
 package com.aleprimo.nova_store.config;
-
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.*;
+import io.swagger.v3.oas.models.security.*;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.*;
 
+import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
-//    http://localhost:8080/swagger-ui/index.html
 
     @Bean
     public OpenAPI apiInfo() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("🔐 API REST - Pagina de e-commerce")
+                        .title("🛒 Nova Store API - Plataforma de E-commerce")
                         .description("""
-            Esta API REST permite gestionar usuarios, autenticación y roles de manera segura, 
-            utilizando Spring Boot, JWT, y buenas prácticas de arquitectura.
+                            Bienvenido a la documentación oficial de la **API REST de Nova Store**, una solución moderna de comercio electrónico construida con **Spring Boot**, **JWT**, **Spring Security** y buenas prácticas de arquitectura.
 
-            Funcionalidades principales:
-            - Registro y login de usuarios
-            - Asignación y consulta de roles
-            - Validaciones, paginación y más
+                            🔧 **Funcionalidades clave**:
+                            - Gestión completa de productos y categorías
+                            - CRUD de usuarios con validaciones y roles (admin/user)
+                            - Registro, autenticación segura y cambio de contraseña
+                            - Búsqueda avanzada, paginación y filtrado
+                            - Documentación Swagger/OpenAPI
 
-            Ideal como plantilla base para aplicaciones web modernas.
-            """)
+                            🔐 **Autenticación**:
+                            Para acceder a los endpoints protegidos, primero realiza login y copia el token JWT.
+                            Luego, presiona el botón **"Authorize"** e ingrésalo con el formato:
+                            
+                            ```
+                            Bearer TU_TOKEN_AQUI
+                            ```
+
+                            Desarrollado con enfoque en escalabilidad, mantenibilidad y seguridad.
+                        """)
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Alejandro Carullo")
                                 .email("alejandrojuliancarullo@gmail.com")
-                                .url("https://github.com/AlePrimo/Nova-Store-App")));
+                                .url("https://github.com/AlePrimo/Nova-Store-App")))
+                .addSecurityItem(new SecurityRequirement().addList("JWT"))
+                .components(new Components().addSecuritySchemes("JWT",
+                        new SecurityScheme()
+                                .name("Authorization")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .in(SecurityScheme.In.HEADER)
+                                .description("Ingrese el token JWT como: `Bearer eyJhbGci...`")));
     }
 
     @Bean
