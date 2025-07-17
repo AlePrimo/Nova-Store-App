@@ -6,7 +6,8 @@ import io.swagger.v3.oas.models.security.*;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.*;
 
-import java.util.List;
+
+//http://localhost:8080/swagger-ui/index.html
 
 @Configuration
 public class SwaggerConfig {
