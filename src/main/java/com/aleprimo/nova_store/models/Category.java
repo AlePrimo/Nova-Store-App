@@ -17,6 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString(exclude = "products")
+@EqualsAndHashCode(exclude = "products")
 public class Category {
 
     @Id
@@ -28,7 +30,7 @@ public class Category {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     @Builder.Default
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 

@@ -33,6 +33,8 @@ class ProductRepositoryTest {
     private Product product1;
     private Product product2;
 
+
+
     @BeforeEach
     void setUp() {
         category = Category.builder()
@@ -73,6 +75,13 @@ class ProductRepositoryTest {
 
         productRepository.flush();
     }
+
+
+
+
+
+
+
     @Test
     void shouldFindByIsActiveTrue() {
         Pageable pageable = PageRequest.of(0, 10);

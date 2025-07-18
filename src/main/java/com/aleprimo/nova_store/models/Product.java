@@ -33,11 +33,11 @@ public class Product {
     Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 
 
     @PrePersist
