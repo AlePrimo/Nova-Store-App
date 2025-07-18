@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.*;
 
@@ -18,7 +19,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 
 @DataJpaTest
 @EntityScan(basePackages = "com.aleprimo.nova_store.models")
-
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class ProductRepositoryTest {
 
     @Autowired
@@ -69,7 +70,7 @@ class ProductRepositoryTest {
         productRepository.save(product1);
         productRepository.save(product2);
 
-      
+
         productRepository.flush();
     }
     @Test
