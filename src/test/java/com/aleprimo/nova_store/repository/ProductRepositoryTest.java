@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.*;
-import org.springframework.test.annotation.DirtiesContext;
+
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -37,6 +37,7 @@ class ProductRepositoryTest {
         category = Category.builder()
                 .name("Electronics")
                 .description("All electronic items")
+                .isActive(true)
                 .build();
 
         category = categoryRepository.save(category);
@@ -67,9 +68,10 @@ class ProductRepositoryTest {
 
         productRepository.save(product1);
         productRepository.save(product2);
+
+      
         productRepository.flush();
     }
-
     @Test
     void shouldFindByIsActiveTrue() {
         Pageable pageable = PageRequest.of(0, 10);
