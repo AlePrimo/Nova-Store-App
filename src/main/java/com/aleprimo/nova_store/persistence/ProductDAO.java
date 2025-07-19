@@ -21,5 +21,6 @@ public interface ProductDAO {
 
     Optional<Product> findBySku(String sku);
 
+    Optional<Product> findById(Long id);
     void deleteById(Long id);
 }

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Builder
 @Schema(description = "DTO para crear o actualizar un ítem de orden")
 public class OrderItemRequestDTO {
-
+    private Long orderId;
     @NotNull(message = "El ID del producto es obligatorio")
     private Long productId;
 
