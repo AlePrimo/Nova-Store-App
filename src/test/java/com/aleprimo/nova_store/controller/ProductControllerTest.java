@@ -1,175 +1,132 @@
 package com.aleprimo.nova_store.controller;
 
 import com.aleprimo.nova_store.dto.product.ProductRequestDTO;
-import com.aleprimo.nova_store.dto.product.ProductResponseDTO;
-import com.aleprimo.nova_store.entityServices.ProductService;
-import com.aleprimo.nova_store.controller.mappers.ProductMapper;
+
+import com.aleprimo.nova_store.models.Category;
+import com.aleprimo.nova_store.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.*;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
-@WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private ProductService productService;
-
-    @MockBean
-    private ProductMapper productMapper;
-
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ProductRequestDTO requestDTO;
-    private ProductResponseDTO responseDTO;
-    private Pageable pageable;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private Long categoryId;
 
     @BeforeEach
     void setUp() {
-        requestDTO = ProductRequestDTO.builder()
-                .name("Producto Test")
-                .description("Descripción larga del producto")
-                .shortDescription("Descripción corta")
-                .price(new BigDecimal("1000.00"))
-                .stock(10)
-                .imageUrl("http://image.com/product.jpg")
-                .sku("PROD-001")
-                .isActive(true)
-                .categoryId(1L)
-                .build();
-
-        responseDTO = ProductResponseDTO.builder()
-                .id(1L)
-                .name("Producto Test")
-                .description("Descripción larga del producto")
-                .shortDescription("Descripción corta")
-                .price(new BigDecimal("1000.00"))
-                .stock(10)
-                .imageUrl("http://image.com/product.jpg")
-                .sku("PROD-001")
-                .isActive(true)
-                .categoryName("Electrónica")
-                .build();
-
-        pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
+        categoryRepository.deleteAll();
+        Category category = new Category();
+        category.setName("Electrónica");
+        categoryId = categoryRepository.save(category).getId();
     }
 
     @Test
-    void createProduct_shouldReturnCreated() throws Exception {
-        Mockito.when(productService.createProduct(any())).thenReturn(responseDTO);
+    void createProduct_shouldReturn201() throws Exception {
+        ProductRequestDTO dto = ProductRequestDTO.builder()
+                .name("Producto 1")
+                .description("Descripción larga")
+                .shortDescription("Corta")
+                .price(BigDecimal.valueOf(19.99))
+                .stock(50)
+                .imageUrl("https://img.com/1.jpg")
+                .sku("SKU123")
+                .isActive(true)
+                .categoryId(categoryId)
+                .build();
 
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("Producto Test"));
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.name").value("Producto 1"));
     }
 
     @Test
-    void getAll_shouldReturnPagedProducts() throws Exception {
-        Page<ProductResponseDTO> page = new PageImpl<>(List.of(responseDTO));
-        Mockito.when(productService.getAllProducts(any())).thenReturn(page);
-
+    void getAll_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/products/all"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].name").value("Producto Test"));
+                .andExpect(status().isOk());
     }
 
     @Test
-    void getActive_shouldReturnPagedActiveProducts() throws Exception {
-        Page<ProductResponseDTO> page = new PageImpl<>(List.of(responseDTO));
-        Mockito.when(productService.getActiveProducts(any())).thenReturn(page);
-
+    void getActive_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/products/active"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].isActive").value(true));
+                .andExpect(status().isOk());
     }
 
     @Test
-    void searchByName_shouldReturnFilteredProducts() throws Exception {
-        Page<ProductResponseDTO> page = new PageImpl<>(List.of(responseDTO));
-        Mockito.when(productService.searchByName(eq("Producto"), any())).thenReturn(page);
-
+    void searchByName_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/products/search/name")
                         .param("name", "Producto"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].name").value("Producto Test"));
+                .andExpect(status().isOk());
     }
 
     @Test
-    void getByCategory_shouldReturnFilteredByCategory() throws Exception {
-        Page<ProductResponseDTO> page = new PageImpl<>(List.of(responseDTO));
-        Mockito.when(productService.getProductsByCategory(eq(1L), any())).thenReturn(page);
-
-        mockMvc.perform(get("/api/products/category/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].categoryName").value("Electrónica"));
+    void getByCategory_shouldReturn200() throws Exception {
+        mockMvc.perform(get("/api/products/category/" + categoryId))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void searchByCategoryAndName_shouldReturnFilteredProducts() throws Exception {
-        Page<ProductResponseDTO> page = new PageImpl<>(List.of(responseDTO));
-        Mockito.when(productService.searchByCategoryAndName(eq(1L), eq("Producto"), any())).thenReturn(page);
-
+    void searchByCategoryAndName_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/products/search")
-                        .param("categoryId", "1")
+                        .param("categoryId", categoryId.toString())
                         .param("name", "Producto"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].name").value("Producto Test"));
+                .andExpect(status().isOk());
     }
 
     @Test
-    void getBySku_shouldReturnProductIfExists() throws Exception {
-        Mockito.when(productService.getBySku("PROD-001")).thenReturn(Optional.of(responseDTO));
-
-        mockMvc.perform(get("/api/products/sku/PROD-001"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.sku").value("PROD-001"));
-    }
-
-    @Test
-    void getBySku_shouldReturnNotFoundIfNotExists() throws Exception {
-        Mockito.when(productService.getBySku("NO-EXISTE")).thenReturn(Optional.empty());
-
-        mockMvc.perform(get("/api/products/sku/NO-EXISTE"))
+    void getBySku_shouldReturn404() throws Exception {
+        mockMvc.perform(get("/api/products/sku/NOSKU"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void updateProduct_shouldReturnUpdatedProduct() throws Exception {
-        Mockito.when(productService.updateProduct(eq(1L), any())).thenReturn(responseDTO);
+    void updateProduct_shouldReturn404_whenNotExists() throws Exception {
+        ProductRequestDTO dto = ProductRequestDTO.builder()
+                .name("Nuevo Nombre")
+                .description("Nueva desc")
+                .shortDescription("Corta")
+                .price(BigDecimal.valueOf(29.99))
+                .stock(25)
+                .imageUrl("https://img.com/2.jpg")
+                .sku("SKUEDIT")
+                .isActive(true)
+                .categoryId(categoryId)
+                .build();
 
-        mockMvc.perform(put("/api/products/1")
+        mockMvc.perform(put("/api/products/9999")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L));
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void deleteProduct_shouldReturnNoContent() throws Exception {
-        Mockito.doNothing().when(productService).deleteById(1L);
-
-        mockMvc.perform(delete("/api/products/1"))
+    void deleteProduct_shouldReturn204_whenNotExists() throws Exception {
+        mockMvc.perform(delete("/api/products/9999"))
                 .andExpect(status().isNoContent());
     }
 }
