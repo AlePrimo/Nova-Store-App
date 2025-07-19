@@ -32,7 +32,7 @@ public class Category {
     @Builder.Default
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Product> products = new ArrayList<>();
+    List<Product> products = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

@@ -2,6 +2,7 @@ package com.aleprimo.nova_store.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -12,29 +13,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    Long id;
     @Column(name = "first_name", nullable = false, length = 50)
-    private String firstName;
-
+    String firstName;
     @Column(name = "last_name", nullable = false, length = 50)
-    private String lastName;
-
+    String lastName;
     @Column(name = "email", nullable = false, unique = true, length = 100)
-    private String email;
-
+    String email;
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
-
+    Boolean isActive;
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
+     LocalDateTime createdAt;
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
