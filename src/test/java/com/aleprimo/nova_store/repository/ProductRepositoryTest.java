@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.*;
+import org.springframework.test.context.ActiveProfiles;
 
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DataJpaTest
+@ActiveProfiles("test")
 @EntityScan(basePackages = "com.aleprimo.nova_store.models")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class ProductRepositoryTest {
@@ -30,11 +32,6 @@ class ProductRepositoryTest {
 
     private Category category;
 
-    private Product product1;
-    private Product product2;
-
-
-
     @BeforeEach
     void setUp() {
         category = Category.builder()
@@ -45,7 +42,7 @@ class ProductRepositoryTest {
 
         category = categoryRepository.save(category);
 
-        product1 = Product.builder()
+        Product product1 = Product.builder()
                 .name("Smartphone")
                 .description("Latest smartphone")
                 .shortDescription("New phone")
@@ -57,7 +54,7 @@ class ProductRepositoryTest {
                 .category(category)
                 .build();
 
-        product2 = Product.builder()
+        Product product2 = Product.builder()
                 .name("Smart TV")
                 .description("50 inch Smart TV")
                 .shortDescription("TV")
@@ -71,43 +68,35 @@ class ProductRepositoryTest {
 
         productRepository.save(product1);
         productRepository.save(product2);
-
-
         productRepository.flush();
     }
-
-
-
-
-
-
 
     @Test
     void shouldFindByIsActiveTrue() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Product> result = productRepository.findByIsActiveTrue(pageable);
-        assertThat(result.getContent()).hasSize(2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
     void shouldFindByCategoryId() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Product> result = productRepository.findByCategoryId(category.getId(), pageable);
-        assertThat(result.getContent()).hasSize(2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
     void shouldFindByNameContainingIgnoreCase() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Product> result = productRepository.findByNameContainingIgnoreCase("smart", pageable);
-        assertThat(result.getContent()).hasSize(2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
     void shouldFindByCategoryIdAndNameContainingIgnoreCase() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Product> result = productRepository.findByCategoryIdAndNameContainingIgnoreCase(category.getId(), "tv", pageable);
-        assertThat(result.getContent()).hasSize(1);
+        assertThat(result).hasSize(1);
         assertThat(result.getContent().get(0).getName()).isEqualTo("Smart TV");
     }
 
@@ -117,5 +106,4 @@ class ProductRepositoryTest {
         assertThat(result).isPresent();
         assertThat(result.get().getName()).isEqualTo("Smartphone");
     }
-
 }
