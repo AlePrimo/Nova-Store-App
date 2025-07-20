@@ -1,11 +1,9 @@
 package com.aleprimo.nova_store.repository;
 
 
-import com.aleprimo.nova_store.models.Customer;
-import com.aleprimo.nova_store.models.Order;
-import com.aleprimo.nova_store.models.OrderItem;
-import com.aleprimo.nova_store.models.Product;
+import com.aleprimo.nova_store.models.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-public class OrderItemRepositoryTest {
+class OrderItemRepositoryTest {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
@@ -28,84 +26,103 @@ public class OrderItemRepositoryTest {
     private OrderRepository orderRepository;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private CategoryRepository categoryRepository;
 
     private Order order;
     private Product product;
+    private OrderItem orderItem;
 
     @BeforeEach
-    void setup() {
-        Customer customer = Customer.builder()
-                .firstName("María")
-                .lastName("López")
-                .email("maria@example.com")
-                .isActive(true)
-                .build();
-        customerRepository.save(customer);
+    void setUp() {
+        Category category = categoryRepository.save(
+                Category.builder()
+                        .name("Tecnología")
+                        .description("Productos tecnológicos")
+                        .isActive(true)
+                        .build()
+        );
 
-        product = Product.builder()
-                .name("Producto A")
-                .price(BigDecimal.valueOf(500))
-                .stock(100)
-                .isActive(true)
-                .sku("SKU123")
-                .build();
-        productRepository.save(product);
+        Customer customer = customerRepository.save(
+                Customer.builder()
+                        .firstName("María")
+                        .lastName("Gómez")
+                        .email("maria@example.com")
+                        .isActive(true)
+                        .build()
+        );
 
-        order = Order.builder()
-                .customer(customer)
-                .totalAmount(BigDecimal.valueOf(1000))
-                .status("PROCESSING")
-                .createdAt(LocalDateTime.now())
-                .build();
-        orderRepository.save(order);
+        product = productRepository.save(
+                Product.builder()
+                        .name("Laptop")
+                        .description("Una laptop potente")
+                        .shortDescription("Gaming Laptop")
+                        .price(BigDecimal.valueOf(999.99))
+                        .stock(10)
+                        .sku("SKU-123")
+                        .category(category) 
+                        .isActive(true)
+                        .build()
+        );
+
+        order = orderRepository.save(
+                Order.builder()
+                        .customer(customer)
+                        .createdAt(LocalDateTime.now())
+                        .status("PENDING")
+                        .totalAmount(BigDecimal.ZERO)
+                        .paymentMethod("CASH")
+                        .build()
+        );
+
+        orderItem = orderItemRepository.save(
+                OrderItem.builder()
+                        .order(order)
+                        .product(product)
+                        .quantity(2)
+                        .unitPrice(BigDecimal.valueOf(1999.98))
+                        .build()
+        );
+    }
+
+
+    @Test
+    @DisplayName("Guardar item de pedido")
+    void shouldSaveOrderItem() {
+        assertThat(orderItem.getId()).isNotNull();
+        assertThat(orderItem.getProduct()).isEqualTo(product);
+        assertThat(orderItem.getQuantity()).isEqualTo(2);
     }
 
     @Test
-    void testCreateOrderItem() {
-        OrderItem item = createOrderItem();
-        OrderItem saved = orderItemRepository.save(item);
-
-        assertThat(saved.getId()).isNotNull();
-        assertThat(saved.getQuantity()).isEqualTo(2);
-    }
-
-    @Test
-    void testReadOrderItemById() {
-        OrderItem saved = orderItemRepository.save(createOrderItem());
-        Optional<OrderItem> found = orderItemRepository.findById(saved.getId());
-
+    @DisplayName("Buscar item por ID")
+    void shouldFindOrderItemById() {
+        Optional<OrderItem> found = orderItemRepository.findById(orderItem.getId());
         assertThat(found).isPresent();
-        assertThat(found.get().getUnitPrice()).isEqualTo(BigDecimal.valueOf(500));
+        assertThat(found.get().getUnitPrice()).isEqualTo(orderItem.getUnitPrice());
     }
 
     @Test
-    void testUpdateOrderItem() {
-        OrderItem saved = orderItemRepository.save(createOrderItem());
-        saved.setQuantity(5);
-        OrderItem updated = orderItemRepository.save(saved);
+    @DisplayName("Actualizar item de pedido")
+    void shouldUpdateOrderItem() {
+        orderItem.setQuantity(3);
+        orderItem.setUnitPrice(product.getPrice().multiply(BigDecimal.valueOf(3)));
+        OrderItem updated = orderItemRepository.save(orderItem);
 
-        assertThat(updated.getQuantity()).isEqualTo(5);
+        assertThat(updated.getQuantity()).isEqualTo(3);
+        assertThat(updated.getUnitPrice()).isEqualTo(BigDecimal.valueOf(2999.97));
     }
 
     @Test
-    void testDeleteOrderItem() {
-        OrderItem saved = orderItemRepository.save(createOrderItem());
-        orderItemRepository.delete(saved);
-
-        Optional<OrderItem> found = orderItemRepository.findById(saved.getId());
-        assertThat(found).isNotPresent();
-    }
-
-    private OrderItem createOrderItem() {
-        return OrderItem.builder()
-                .order(order)
-                .product(product)
-                .quantity(2)
-                .unitPrice(product.getPrice())
-                .build();
+    @DisplayName("Eliminar item de pedido")
+    void shouldDeleteOrderItem() {
+        orderItemRepository.delete(orderItem);
+        Optional<OrderItem> deleted = orderItemRepository.findById(orderItem.getId());
+        assertThat(deleted).isEmpty();
     }
 }
