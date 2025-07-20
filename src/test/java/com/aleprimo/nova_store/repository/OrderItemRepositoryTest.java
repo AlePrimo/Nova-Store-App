@@ -65,7 +65,7 @@ class OrderItemRepositoryTest {
                         .price(BigDecimal.valueOf(999.99))
                         .stock(10)
                         .sku("SKU-123")
-                        .category(category) 
+                        .category(category)
                         .isActive(true)
                         .build()
         );
