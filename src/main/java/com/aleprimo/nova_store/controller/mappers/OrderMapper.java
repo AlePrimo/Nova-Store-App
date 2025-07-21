@@ -16,7 +16,7 @@ public class OrderMapper {
                 .id(order.getId())
                 .customerId(order.getCustomer().getId())
                 .total(order.getTotalAmount())
-                .status(order.getStatus())
+                .orderStatus(order.getOrderStatus())
                 .createdAt(order.getCreatedAt())
                 .build();
     }
@@ -26,7 +26,7 @@ public class OrderMapper {
 
         Order order = new Order();
         order.setTotalAmount(dto.getTotal());
-        order.setStatus(dto.getStatus());
+        order.setOrderStatus(dto.getOrderStatus());
 
         return order;
     }
@@ -35,7 +35,7 @@ public class OrderMapper {
         if (dto == null || order == null) return;
 
         order.setTotalAmount(dto.getTotal());
-        order.setStatus(dto.getStatus());
+        order.setOrderStatus(dto.getOrderStatus());
 
     }
 }

@@ -6,6 +6,7 @@ import com.aleprimo.nova_store.dto.order.OrderResponseDTO;
 import com.aleprimo.nova_store.entityServices.implementations.OrderServiceImpl;
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.Order;
+import com.aleprimo.nova_store.models.enums.OrderStatus;
 import com.aleprimo.nova_store.persistence.CustomerDAO;
 import com.aleprimo.nova_store.persistence.OrderDAO;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,20 +52,20 @@ class OrderServiceImplTest {
         order.setId(10L);
         order.setCustomer(customer);
         order.setTotalAmount(BigDecimal.valueOf(100));
-        order.setStatus("PENDING");
+        order.setOrderStatus(OrderStatus.PENDING);
         order.setCreatedAt(LocalDateTime.now());
 
         requestDTO = OrderRequestDTO.builder()
                 .customerId(1L)
                 .total(BigDecimal.valueOf(100))
-                .status("PENDING")
+                .orderStatus(OrderStatus.PENDING)
                 .build();
 
         responseDTO = OrderResponseDTO.builder()
                 .id(10L)
                 .customerId(1L)
                 .total(BigDecimal.valueOf(100))
-                .status("PENDING")
+                .orderStatus(OrderStatus.PENDING)
                 .createdAt(order.getCreatedAt())
                 .build();
     }

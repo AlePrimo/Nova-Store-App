@@ -3,6 +3,7 @@ package com.aleprimo.nova_store.controller;
 import com.aleprimo.nova_store.dto.order.OrderRequestDTO;
 import com.aleprimo.nova_store.dto.order.OrderResponseDTO;
 import com.aleprimo.nova_store.entityServices.OrderService;
+import com.aleprimo.nova_store.models.enums.OrderStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,14 +47,14 @@ class OrderControllerTest {
         orderRequestDTO = OrderRequestDTO.builder()
                 .customerId(1L)
                 .total(BigDecimal.valueOf(120.50))
-                .status("CREATED")
+                .orderStatus(OrderStatus.PROCESSING)
                 .build();
 
         orderResponseDTO = OrderResponseDTO.builder()
                 .id(1L)
                 .customerId(1L)
                 .total(BigDecimal.valueOf(120.50))
-                .status("CREATED")
+                .orderStatus(OrderStatus.DELIVERED)
                 .createdAt(LocalDateTime.now())
                 .build();
     }

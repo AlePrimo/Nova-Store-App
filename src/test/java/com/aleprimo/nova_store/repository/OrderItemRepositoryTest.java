@@ -2,6 +2,8 @@ package com.aleprimo.nova_store.repository;
 
 
 import com.aleprimo.nova_store.models.*;
+import com.aleprimo.nova_store.models.enums.OrderStatus;
+import com.aleprimo.nova_store.models.enums.PaymentMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -74,9 +76,9 @@ class OrderItemRepositoryTest {
                 Order.builder()
                         .customer(customer)
                         .createdAt(LocalDateTime.now())
-                        .status("PENDING")
+                        .orderStatus(OrderStatus.PENDING)
                         .totalAmount(BigDecimal.ZERO)
-                        .paymentMethod("CASH")
+                        .paymentMethod(PaymentMethod.CASH)
                         .build()
         );
 

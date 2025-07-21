@@ -1,5 +1,7 @@
 package com.aleprimo.nova_store.models;
 
+import com.aleprimo.nova_store.models.enums.OrderStatus;
+import com.aleprimo.nova_store.models.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -30,10 +32,12 @@ public class Order {
     List<OrderItem> orderItems = new ArrayList<>();
     @Column(name = "total_amount", nullable = false)
     BigDecimal totalAmount;
-    @Column(nullable = false)
-    String paymentMethod;
-    @Column(nullable = false)
-    String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", nullable = false)
+    private PaymentMethod paymentMethod;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", nullable = false)
+    private OrderStatus orderStatus;
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
     @PrePersist

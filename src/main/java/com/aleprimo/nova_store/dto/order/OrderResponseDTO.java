@@ -1,5 +1,6 @@
 package com.aleprimo.nova_store.dto.order;
 
+import com.aleprimo.nova_store.models.enums.OrderStatus;
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -19,7 +20,7 @@ public class OrderResponseDTO {
 
     private BigDecimal total;
 
-    private String status;
+    private OrderStatus orderStatus;
 
     private LocalDateTime createdAt;
 }

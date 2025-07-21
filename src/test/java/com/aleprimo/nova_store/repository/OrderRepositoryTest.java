@@ -3,6 +3,8 @@ package com.aleprimo.nova_store.repository;
 
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.Order;
+import com.aleprimo.nova_store.models.enums.OrderStatus;
+import com.aleprimo.nova_store.models.enums.PaymentMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,8 +47,8 @@ class OrderRepositoryTest {
                 .customer(customer)
                 .createdAt(LocalDateTime.now())
                 .totalAmount(BigDecimal.valueOf(120.50))
-                .status("PROCESSING")
-                .paymentMethod("CREDIT_CARD")
+                .orderStatus(OrderStatus.PROCESSING)
+                .paymentMethod(PaymentMethod.PAYPAL)
                 .build()
         );
     }
@@ -56,8 +58,8 @@ class OrderRepositoryTest {
     void shouldSaveOrder() {
         assertThat(order.getId()).isNotNull();
         assertThat(order.getCustomer()).isEqualTo(customer);
-        assertThat(order.getStatus()).isEqualTo("PROCESSING");
-        assertThat(order.getPaymentMethod()).isEqualTo("CREDIT_CARD");
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(order.getPaymentMethod()).isEqualTo(PaymentMethod.CASH);
     }
 
     @Test
@@ -71,10 +73,10 @@ class OrderRepositoryTest {
     @Test
     @DisplayName("Actualizar pedido")
     void shouldUpdateOrder() {
-        order.setStatus("COMPLETED");
+        order.setOrderStatus(OrderStatus.SHIPPED);
         Order updated = orderRepository.save(order);
 
-        assertThat(updated.getStatus()).isEqualTo("COMPLETED");
+        assertThat(updated.getOrderStatus()).isEqualTo(OrderStatus.SHIPPED);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.aleprimo.nova_store.dto.order;
 
+import com.aleprimo.nova_store.models.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -22,6 +23,7 @@ public class OrderRequestDTO {
     @Schema(description = "Total de la orden", example = "150000.00")
     private BigDecimal total;
 
+    @NotNull
     @Schema(description = "Estado de la orden", example = "PENDING")
-    private String status;
+    private OrderStatus orderStatus;
 }
