@@ -12,4 +12,5 @@ public interface ShoppingCartDAO {
     Page<ShoppingCart> findAll(Pageable pageable);
     ShoppingCart save(ShoppingCart shoppingCart);
     void deleteById(Long id);
+    boolean existsById(Long id);
 }

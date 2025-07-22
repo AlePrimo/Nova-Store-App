@@ -14,4 +14,5 @@ public interface ShoppingCartItemDAO {
     ShoppingCartItem save(ShoppingCartItem item);
     void deleteById(Long id);
     void deleteByShoppingCartId(Long cartId);
+    boolean existsById(Long id);
 }

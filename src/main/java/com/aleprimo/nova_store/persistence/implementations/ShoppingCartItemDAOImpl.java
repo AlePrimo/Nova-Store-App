@@ -46,4 +46,9 @@ public class ShoppingCartItemDAOImpl implements ShoppingCartItemDAO {
     public void deleteByShoppingCartId(Long cartId) {
         itemRepository.deleteByShoppingCartId(cartId);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return itemRepository.existsById(id);
+    }
 }
