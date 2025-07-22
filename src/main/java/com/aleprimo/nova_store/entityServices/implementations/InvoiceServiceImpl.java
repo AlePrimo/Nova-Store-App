@@ -30,7 +30,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         Order order = orderDAO.findById(dto.getOrderId())
                 .orElseThrow(() -> new EntityNotFoundException("Orden no encontrada"));
 
-        BigDecimal total = order.getItems().stream()
+        BigDecimal total = order.getOrderItems().stream()
                 .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -56,7 +56,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void deleteInvoice(Long id) {
-        if (!invoiceDAO.existsById(id))
+        if (!invoiceDAO.existById(id))
             throw new EntityNotFoundException("Factura no encontrada");
         invoiceDAO.deleteById(id);
     }

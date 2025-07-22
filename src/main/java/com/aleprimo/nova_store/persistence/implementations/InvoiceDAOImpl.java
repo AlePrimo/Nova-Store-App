@@ -40,4 +40,9 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     public void deleteById(Long id) {
         invoiceRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existById(Long id) {
+        return invoiceRepository.existsById(id);
+    }
 }

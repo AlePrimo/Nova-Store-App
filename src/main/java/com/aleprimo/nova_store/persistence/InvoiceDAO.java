@@ -12,4 +12,5 @@ public interface InvoiceDAO {
     Page<Invoice> findAll(Pageable pageable);
     Invoice save(Invoice invoice);
     void deleteById(Long id);
+    boolean existById(Long id);
 }
