@@ -47,7 +47,7 @@ class OrderRepositoryTest {
                 .customer(customer)
                 .createdAt(LocalDateTime.now())
                 .totalAmount(BigDecimal.valueOf(120.50))
-                .orderStatus(OrderStatus.PROCESSING)
+                .orderStatus(OrderStatus.PENDING)
                 .paymentMethod(PaymentMethod.PAYPAL)
                 .build()
         );
@@ -59,7 +59,7 @@ class OrderRepositoryTest {
         assertThat(order.getId()).isNotNull();
         assertThat(order.getCustomer()).isEqualTo(customer);
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.PENDING);
-        assertThat(order.getPaymentMethod()).isEqualTo(PaymentMethod.CASH);
+        assertThat(order.getPaymentMethod()).isEqualTo(PaymentMethod.PAYPAL);
     }
 
     @Test
