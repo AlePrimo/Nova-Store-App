@@ -9,6 +9,7 @@ import com.aleprimo.nova_store.dto.shoppingCartItem.ShoppingCartItemRequestDTO;
 import com.aleprimo.nova_store.dto.shoppingCartItem.ShoppingCartItemResponseDTO;
 import com.aleprimo.nova_store.entityServices.ShoppingCartItemService;
 import com.aleprimo.nova_store.entityServices.ShoppingCartService;
+import com.aleprimo.nova_store.handler.exceptions.ResourceNotFoundException;
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.Product;
 import com.aleprimo.nova_store.models.ShoppingCart;
@@ -41,6 +42,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart = shoppingCartDAO.save(cart);
 
         return mapper.toDto(cart);
+    }
+
+    @Override
+    public ShoppingCartResponseDTO update(Long id, ShoppingCartRequestDTO dto) {
+        ShoppingCart cart = shoppingCartDAO.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ShoppingCart not found with id: " + id));
+
+        mapper.updateEntityFromDto(dto, cart);
+        ShoppingCart updated = shoppingCartDAO.save(cart);
+
+        return mapper.toDto(updated);
     }
 
     @Override
@@ -83,6 +95,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             item.setProduct(product);
 
             return mapper.toDto(itemDAO.save(item));
+        }
+
+        @Override
+        public ShoppingCartItemResponseDTO update(Long id, ShoppingCartItemRequestDTO dto) {
+            ShoppingCartItem item = itemDAO.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("ShoppingCartItem not found with id: " + id));
+
+            mapper.updateEntityFromDto(dto, item);
+            ShoppingCartItem updated = itemDAO.save(item);
+
+            return mapper.toDto(updated);
         }
 
         @Override

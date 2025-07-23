@@ -3,6 +3,8 @@ package com.aleprimo.nova_store.controller.mappers;
 
 import com.aleprimo.nova_store.dto.shoppingCartItem.ShoppingCartItemRequestDTO;
 import com.aleprimo.nova_store.dto.shoppingCartItem.ShoppingCartItemResponseDTO;
+import com.aleprimo.nova_store.models.Product;
+import com.aleprimo.nova_store.models.ShoppingCart;
 import com.aleprimo.nova_store.models.ShoppingCartItem;
 import org.springframework.stereotype.Component;
 
@@ -26,14 +28,17 @@ public class ShoppingCartItemMapper {
 
         return ShoppingCartItem.builder()
                 .quantity(dto.getQuantity())
+                .shoppingCart(ShoppingCart.builder().id(dto.getShoppingCartId()).build())
+                .product(Product.builder().id(dto.getProductId()).build())
                 .build();
-
     }
 
     public void updateEntityFromDto(ShoppingCartItemRequestDTO dto, ShoppingCartItem item) {
         if (dto == null || item == null) return;
 
         item.setQuantity(dto.getQuantity());
-
+        item.setShoppingCart(ShoppingCart.builder().id(dto.getShoppingCartId()).build());
+        item.setProduct(Product.builder().id(dto.getProductId()).build());
     }
+
 }

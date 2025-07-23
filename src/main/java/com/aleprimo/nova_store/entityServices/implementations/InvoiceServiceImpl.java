@@ -5,6 +5,7 @@ import com.aleprimo.nova_store.controller.mappers.InvoiceMapper;
 import com.aleprimo.nova_store.dto.invoice.InvoiceRequestDTO;
 import com.aleprimo.nova_store.dto.invoice.InvoiceResponseDTO;
 import com.aleprimo.nova_store.entityServices.InvoiceService;
+import com.aleprimo.nova_store.handler.exceptions.ResourceNotFoundException;
 import com.aleprimo.nova_store.models.Invoice;
 import com.aleprimo.nova_store.models.Order;
 import com.aleprimo.nova_store.persistence.InvoiceDAO;
@@ -40,6 +41,17 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .build();
 
         return mapper.toDto(invoiceDAO.save(invoice));
+    }
+
+    @Override
+    public InvoiceResponseDTO update(Long id, InvoiceRequestDTO dto) {
+        Invoice invoice = invoiceDAO.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Invoice not found with id: " + id));
+
+        mapper.updateEntityFromDto(dto, invoice);
+        Invoice updated = invoiceDAO.save(invoice);
+
+        return mapper.toDto(updated);
     }
 
     @Override
