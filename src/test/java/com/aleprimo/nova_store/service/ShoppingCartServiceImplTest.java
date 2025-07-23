@@ -1,12 +1,13 @@
 package com.aleprimo.nova_store.service;
 
-import com.novastore.dto.request.ShoppingCartRequestDTO;
-import com.novastore.dto.response.ShoppingCartResponseDTO;
-import com.novastore.entity.Customer;
-import com.novastore.entity.ShoppingCart;
-import com.novastore.mapper.ShoppingCartMapper;
-import com.novastore.repository.ShoppingCartRepository;
-import com.novastore.service.dao.ShoppingCartDAO;
+
+import com.aleprimo.nova_store.controller.mappers.ShoppingCartMapper;
+import com.aleprimo.nova_store.dto.shoppingCart.ShoppingCartRequestDTO;
+import com.aleprimo.nova_store.dto.shoppingCart.ShoppingCartResponseDTO;
+import com.aleprimo.nova_store.entityServices.implementations.ShoppingCartServiceImpl;
+import com.aleprimo.nova_store.models.Customer;
+import com.aleprimo.nova_store.models.ShoppingCart;
+import com.aleprimo.nova_store.persistence.ShoppingCartDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -51,14 +52,11 @@ class ShoppingCartServiceImplTest {
         responseDTO = ShoppingCartResponseDTO.builder()
                 .id(1L)
                 .customerId(1L)
-                .totalPrice(BigDecimal.TEN)
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
 
         requestDTO = ShoppingCartRequestDTO.builder()
                 .customerId(1L)
-                .totalPrice(BigDecimal.TEN)
                 .build();
     }
 
@@ -67,7 +65,7 @@ class ShoppingCartServiceImplTest {
         when(shoppingCartDAO.findById(1L)).thenReturn(Optional.of(shoppingCart));
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(responseDTO);
 
-        ShoppingCartResponseDTO result = shoppingCartService.findById(1L);
+        ShoppingCartResponseDTO result = shoppingCartService.getCartById(1L);
         assertNotNull(result);
         assertEquals(1L, result.getId());
     }
@@ -80,7 +78,7 @@ class ShoppingCartServiceImplTest {
         when(shoppingCartDAO.findAll(pageable)).thenReturn(page);
         when(shoppingCartMapper.toDto(any())).thenReturn(responseDTO);
 
-        Page<ShoppingCartResponseDTO> result = shoppingCartService.findAll(pageable);
+        Page<ShoppingCartResponseDTO> result = shoppingCartService.getAllCarts(pageable);
 
         assertEquals(1, result.getContent().size());
         verify(shoppingCartDAO).findAll(pageable);
@@ -92,7 +90,7 @@ class ShoppingCartServiceImplTest {
         when(shoppingCartDAO.save(shoppingCart)).thenReturn(shoppingCart);
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(responseDTO);
 
-        ShoppingCartResponseDTO result = shoppingCartService.create(requestDTO);
+        ShoppingCartResponseDTO result = shoppingCartService.createCart(requestDTO);
 
         assertEquals(responseDTO.getId(), result.getId());
         verify(shoppingCartDAO).save(shoppingCart);
@@ -113,7 +111,7 @@ class ShoppingCartServiceImplTest {
     @Test
     void testDelete() {
         doNothing().when(shoppingCartDAO).deleteById(1L);
-        shoppingCartService.delete(1L);
+        shoppingCartService.deleteCart(1L);
         verify(shoppingCartDAO).deleteById(1L);
     }
 }

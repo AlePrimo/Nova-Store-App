@@ -43,14 +43,11 @@ class ShoppingCartControllerTest {
         responseDTO = ShoppingCartResponseDTO.builder()
                 .id(1L)
                 .customerId(1L)
-                .totalPrice(BigDecimal.TEN)
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
 
         requestDTO = ShoppingCartRequestDTO.builder()
                 .customerId(1L)
-                .totalPrice(BigDecimal.TEN)
                 .build();
     }
 
@@ -66,7 +63,7 @@ class ShoppingCartControllerTest {
     @Test
     void testGetAll() throws Exception {
         Page<ShoppingCartResponseDTO> page = new PageImpl<>(List.of(responseDTO));
-        Mockito.when(shoppingCartService.findAll(any(Pageable.class))).thenReturn(page);
+        Mockito.when(shoppingCartService.getAllCarts(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/api/shopping-carts"))
                 .andExpect(status().isOk())
@@ -75,7 +72,7 @@ class ShoppingCartControllerTest {
 
     @Test
     void testCreate() throws Exception {
-        Mockito.when(shoppingCartService.create(any())).thenReturn(responseDTO);
+        Mockito.when(shoppingCartService.createCart(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/api/shopping-carts")
                         .contentType(MediaType.APPLICATION_JSON)
