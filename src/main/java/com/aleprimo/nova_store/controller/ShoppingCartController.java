@@ -5,7 +5,8 @@ import com.aleprimo.nova_store.dto.shoppingCart.ShoppingCartRequestDTO;
 import com.aleprimo.nova_store.dto.shoppingCart.ShoppingCartResponseDTO;
 import com.aleprimo.nova_store.entityServices.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -16,39 +17,40 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/shopping-carts")
 @RequiredArgsConstructor
+@Tag(name = "Shopping Cart Controller", description = "Endpoints para la gestión de carritos de compra")
 public class ShoppingCartController {
-
     private final ShoppingCartService shoppingCartService;
 
-    @Operation(summary = "List all shopping carts (paginated)")
+    @Operation(summary = "Listar todos los carritos (paginado)")
     @GetMapping
     public ResponseEntity<?> findAll(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(shoppingCartService.getAllCarts(pageable));
     }
 
-    @Operation(summary = "Get a shopping cart by ID")
+    @Operation(summary = "Obtener un carrito por ID")
     @GetMapping("/{id}")
     public ResponseEntity<ShoppingCartResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(shoppingCartService.getCartById(id));
     }
 
-    @Operation(summary = "Create a new shopping cart")
+    @Operation(summary = "Crear un nuevo carrito")
     @PostMapping
     public ResponseEntity<ShoppingCartResponseDTO> create(@Valid @RequestBody ShoppingCartRequestDTO dto) {
         return ResponseEntity.status(201).body(shoppingCartService.createCart(dto));
     }
 
-    @Operation(summary = "Update a shopping cart")
+    @Operation(summary = "Actualizar un carrito existente")
     @PutMapping("/{id}")
     public ResponseEntity<ShoppingCartResponseDTO> update(@PathVariable Long id,
                                                           @Valid @RequestBody ShoppingCartRequestDTO dto) {
-        return ResponseEntity.ok(shoppingCartService.update(id,dto));
+        return ResponseEntity.ok(shoppingCartService.update(id, dto));
     }
 
-    @Operation(summary = "Delete a shopping cart")
+    @Operation(summary = "Eliminar un carrito")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         shoppingCartService.deleteCart(id);
         return ResponseEntity.noContent().build();
     }
+
 }

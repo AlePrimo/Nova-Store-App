@@ -10,8 +10,11 @@ import org.springframework.data.domain.Pageable;
 @Tag(name = "Shopping Cart Service", description = "Operaciones relacionadas al carrito de compras")
 public interface ShoppingCartService {
 
+
     ShoppingCartResponseDTO createCart(ShoppingCartRequestDTO dto);
+
     ShoppingCartResponseDTO update(Long id, ShoppingCartRequestDTO dto);
+
     ShoppingCartResponseDTO getCartById(Long id);
 
     Page<ShoppingCartResponseDTO> getAllCarts(Pageable pageable);
