@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 public interface ShoppingCartService {
 
     ShoppingCartResponseDTO createCart(ShoppingCartRequestDTO dto);
-
+    ShoppingCartResponseDTO update(Long id, ShoppingCartRequestDTO dto);
     ShoppingCartResponseDTO getCartById(Long id);
 
     Page<ShoppingCartResponseDTO> getAllCarts(Pageable pageable);

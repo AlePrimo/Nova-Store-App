@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 public interface InvoiceService {
 
     InvoiceResponseDTO createInvoice(InvoiceRequestDTO dto);
-
+    InvoiceResponseDTO update(Long id, InvoiceRequestDTO dto);
     InvoiceResponseDTO getInvoiceById(Long id);
 
     Page<InvoiceResponseDTO> getAllInvoices(Pageable pageable);
