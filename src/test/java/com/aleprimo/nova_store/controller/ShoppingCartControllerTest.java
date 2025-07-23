@@ -13,17 +13,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WithMockUser(roles = "ADMIN")
 @WebMvcTest(ShoppingCartController.class)
+@ActiveProfiles("test")
 class ShoppingCartControllerTest {
 
     @Autowired
@@ -74,7 +79,7 @@ class ShoppingCartControllerTest {
     void testCreate() throws Exception {
         Mockito.when(shoppingCartService.createCart(any())).thenReturn(responseDTO);
 
-        mockMvc.perform(post("/api/shopping-carts")
+        mockMvc.perform(post("/api/shopping-carts").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
@@ -86,6 +91,7 @@ class ShoppingCartControllerTest {
         Mockito.when(shoppingCartService.update(eq(1L), any())).thenReturn(responseDTO);
 
         mockMvc.perform(put("/api/shopping-carts/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
@@ -94,7 +100,7 @@ class ShoppingCartControllerTest {
 
     @Test
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/shopping-carts/1"))
+        mockMvc.perform(delete("/api/shopping-carts/1").with(csrf()))
                 .andExpect(status().isNoContent());
     }
 }

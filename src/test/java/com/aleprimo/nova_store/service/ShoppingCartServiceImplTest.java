@@ -7,11 +7,15 @@ import com.aleprimo.nova_store.dto.shoppingCart.ShoppingCartResponseDTO;
 import com.aleprimo.nova_store.entityServices.implementations.ShoppingCartServiceImpl;
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.ShoppingCart;
+
 import com.aleprimo.nova_store.persistence.ShoppingCartDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +24,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
+@ActiveProfiles("test")
 class ShoppingCartServiceImplTest {
 
     @Mock
