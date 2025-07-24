@@ -68,7 +68,8 @@ class ShoppingCartItemControllerTest {
     void testDeleteItemFromCart() throws Exception {
         Long itemId = 5L;
 
-        mockMvc.perform(delete("/api/v1/shopping-cart-items/{id}", itemId).with(csrf()))
+        mockMvc.perform(delete("/api/v1/shopping-cart-items/{id}", itemId)
+                        .with(csrf()))
 
                 .andExpect(status().isNoContent());
     }

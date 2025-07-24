@@ -32,7 +32,7 @@ public class ShoppingCart {
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ShoppingCartItem> items = new ArrayList<>();
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price")
     BigDecimal totalPrice;
 
     @CreationTimestamp

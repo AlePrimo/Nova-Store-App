@@ -1,10 +1,7 @@
 package com.aleprimo.nova_store.repository;
 
 
-import com.aleprimo.nova_store.models.Customer;
-import com.aleprimo.nova_store.models.Product;
-import com.aleprimo.nova_store.models.ShoppingCart;
-import com.aleprimo.nova_store.models.ShoppingCartItem;
+import com.aleprimo.nova_store.models.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Transactional
 public class ShoppingCartItemRepositoryTest {
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private ShoppingCartItemRepository shoppingCartItemRepository;
@@ -45,7 +44,8 @@ public class ShoppingCartItemRepositoryTest {
                 .lastName("Pérez")
                 .email("juan@example.com")
                 .isActive(true)
-                .createdAt(LocalDateTime.now()).build();
+                .createdAt(LocalDateTime.now())
+                .build();
 
         customer = customerRepository.save(customer);
 
@@ -56,21 +56,34 @@ public class ShoppingCartItemRepositoryTest {
 
         cart = shoppingCartRepository.save(cart);
 
+
+        Category category = Category.builder()
+                .name("Categoría de prueba")
+                .description("Descripción de prueba")
+                .isActive(true)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        category = categoryRepository.save(category);
+
         product = Product.builder()
                 .name("Producto de prueba")
                 .price(BigDecimal.valueOf(100))
                 .stock(10)
                 .sku("SKU123")
                 .isActive(true)
+                .category(category)
                 .build();
 
         product = productRepository.save(product);
     }
 
+
     @Test
     void testSaveAndFindByShoppingCartId() {
         ShoppingCartItem item = ShoppingCartItem.builder()
                 .shoppingCart(cart)
+                .price(BigDecimal.valueOf(100))
                 .product(product)
                 .quantity(2)
                 .build();
@@ -88,6 +101,7 @@ public class ShoppingCartItemRepositoryTest {
     void testDeleteByShoppingCartId() {
         ShoppingCartItem item = ShoppingCartItem.builder()
                 .shoppingCart(cart)
+                .price(BigDecimal.valueOf(100))
                 .product(product)
                 .quantity(2)
                 .build();
@@ -104,6 +118,7 @@ public class ShoppingCartItemRepositoryTest {
     void testExistsByShoppingCartIdAndProductId() {
         ShoppingCartItem item = ShoppingCartItem.builder()
                 .shoppingCart(cart)
+                .price(BigDecimal.valueOf(100))
                 .product(product)
                 .quantity(1)
                 .build();
