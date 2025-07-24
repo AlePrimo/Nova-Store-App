@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -72,7 +73,7 @@ class ShoppingCartItemServiceImplTest {
     void testAddItemToCart() {
         when(shoppingCartDAO.findById(1L)).thenReturn(Optional.of(cart));
         when(productDAO.findById(2L)).thenReturn(Optional.of(product));
-        when(shoppingCartItemDAO.existsByShoppingCartIdAndProductId(1L, 2L)).thenReturn(false);
+        when(shoppingCartItemMapper.toEntity(any())).thenReturn(item);
         when(shoppingCartItemDAO.save(any(ShoppingCartItem.class))).thenReturn(item);
         when(shoppingCartItemMapper.toDto(any())).thenReturn(responseDTO);
 
@@ -92,11 +93,11 @@ class ShoppingCartItemServiceImplTest {
         verify(shoppingCartItemDAO, times(1)).deleteById(10L);
     }
 
-//    @Test
-//    void testDeleteItemFromCartThrowsException() {
-//        when(shoppingCartItemDAO.existsById(99L)).thenReturn(false);
-//
-//        assertThrows(javax.persistence.EntityNotFoundException.class, () ->
-//                shoppingCartItemService.deleteItem(99L));
-//    }
+    @Test
+    void testDeleteItemFromCartThrowsException() {
+        when(shoppingCartItemDAO.existsById(99L)).thenReturn(false);
+
+        assertThrows(jakarta.persistence.EntityNotFoundException.class, () ->
+                shoppingCartItemService.deleteItem(99L));
+    }
 }
