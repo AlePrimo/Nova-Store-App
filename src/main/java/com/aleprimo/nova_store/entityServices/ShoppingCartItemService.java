@@ -17,4 +17,5 @@ public interface ShoppingCartItemService {
     Page<ShoppingCartItemResponseDTO> getAllItems(Pageable pageable);
 
     void deleteItem(Long id);
+    boolean existsByShoppingCartIdAndProductId(Long shoppingCartId, Long productId);
 }

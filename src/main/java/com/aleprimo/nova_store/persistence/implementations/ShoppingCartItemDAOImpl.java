@@ -51,4 +51,9 @@ public class ShoppingCartItemDAOImpl implements ShoppingCartItemDAO {
     public boolean existsById(Long id) {
         return itemRepository.existsById(id);
     }
+
+    @Override
+    public boolean existsByShoppingCartIdAndProductId(Long shoppingCartId, Long productId) {
+        return itemRepository.existsByShoppingCartIdAndProductId(shoppingCartId,productId);
+    }
 }

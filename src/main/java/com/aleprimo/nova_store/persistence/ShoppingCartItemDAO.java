@@ -15,4 +15,5 @@ public interface ShoppingCartItemDAO {
     void deleteById(Long id);
     void deleteByShoppingCartId(Long cartId);
     boolean existsById(Long id);
+    boolean existsByShoppingCartIdAndProductId(Long shoppingCartId, Long productId);
 }

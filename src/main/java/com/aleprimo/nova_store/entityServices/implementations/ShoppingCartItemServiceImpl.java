@@ -71,4 +71,9 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
             throw new EntityNotFoundException("Ítem no encontrado");
         itemDAO.deleteById(id);
     }
+
+    @Override
+    public boolean existsByShoppingCartIdAndProductId(Long shoppingCartId, Long productId) {
+        return itemDAO.existsByShoppingCartIdAndProductId(shoppingCartId, productId);
+    }
 }
