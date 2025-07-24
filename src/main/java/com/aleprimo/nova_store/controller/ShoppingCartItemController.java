@@ -32,7 +32,7 @@ public class ShoppingCartItemController {
     }
 
     @Operation(summary = "Create a new cart item")
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ShoppingCartItemResponseDTO> create(@Valid @RequestBody ShoppingCartItemRequestDTO dto) {
         return ResponseEntity.status(201).body(shoppingCartItemService.addItemToCart(dto));
     }
