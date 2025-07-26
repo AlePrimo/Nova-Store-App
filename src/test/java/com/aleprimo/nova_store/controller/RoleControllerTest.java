@@ -25,7 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

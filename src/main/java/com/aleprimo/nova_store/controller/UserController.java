@@ -4,7 +4,7 @@ package com.aleprimo.nova_store.controller;
 import com.aleprimo.nova_store.controller.mappers.UserMapper;
 import com.aleprimo.nova_store.dto.ChangePasswordRequest;
 import com.aleprimo.nova_store.dto.UserDTO;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import com.aleprimo.nova_store.entityServices.UserService;
 import io.swagger.v3.oas.annotations.Operation;

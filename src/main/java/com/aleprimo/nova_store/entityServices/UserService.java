@@ -1,7 +1,7 @@
 package com.aleprimo.nova_store.entityServices;
 
 import com.aleprimo.nova_store.dto.ChangePasswordRequest;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

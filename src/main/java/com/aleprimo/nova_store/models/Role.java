@@ -1,5 +1,6 @@
 package com.aleprimo.nova_store.models;
 
+import com.aleprimo.nova_store.models.enums.RoleName;
 import jakarta.persistence.*;
 
 import lombok.*;

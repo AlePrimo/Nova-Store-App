@@ -5,7 +5,7 @@ import com.aleprimo.nova_store.dto.RoleDTO;
 import com.aleprimo.nova_store.entityServices.RoleService;
 
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

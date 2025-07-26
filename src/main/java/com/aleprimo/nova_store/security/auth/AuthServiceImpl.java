@@ -5,7 +5,7 @@ import com.aleprimo.nova_store.handler.exceptions.RoleNotFoundException;
 import com.aleprimo.nova_store.handler.exceptions.UserNotFoundException;
 import com.aleprimo.nova_store.security.jwt.JwtUtils;
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import com.aleprimo.nova_store.persistence.RoleDAO;
 import com.aleprimo.nova_store.persistence.UserDAO;

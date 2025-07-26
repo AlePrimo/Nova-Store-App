@@ -1,7 +1,7 @@
 package com.aleprimo.nova_store.repository;
 
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

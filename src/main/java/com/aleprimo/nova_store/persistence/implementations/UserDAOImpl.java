@@ -1,6 +1,6 @@
 package com.aleprimo.nova_store.persistence.implementations;
 
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import com.aleprimo.nova_store.persistence.UserDAO;
 import com.aleprimo.nova_store.repository.UserRepository;

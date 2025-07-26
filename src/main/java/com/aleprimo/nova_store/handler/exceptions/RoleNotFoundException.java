@@ -1,6 +1,6 @@
 package com.aleprimo.nova_store.handler.exceptions;
 
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 
 public class RoleNotFoundException extends RuntimeException {
     public RoleNotFoundException(String message) {

@@ -2,7 +2,7 @@ package com.aleprimo.nova_store.controller.mappers;
 
 import com.aleprimo.nova_store.dto.UserDTO;
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import org.springframework.stereotype.Component;
 

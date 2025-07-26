@@ -7,7 +7,7 @@ import com.aleprimo.nova_store.dto.ChangePasswordRequest;
 import com.aleprimo.nova_store.dto.UserDTO;
 import com.aleprimo.nova_store.entityServices.UserService;
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.models.UserEntity;
 import com.aleprimo.nova_store.repository.RoleRepository;
 import com.aleprimo.nova_store.repository.UserRepository;

@@ -1,7 +1,7 @@
 package com.aleprimo.nova_store.persistence.implementations;
 
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.persistence.RoleDAO;
 import com.aleprimo.nova_store.repository.RoleRepository;
 

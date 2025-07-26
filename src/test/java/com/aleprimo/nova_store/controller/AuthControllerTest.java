@@ -3,7 +3,7 @@ package com.aleprimo.nova_store.controller;
 import com.aleprimo.nova_store.Nova_Store;
 import com.aleprimo.nova_store.dto.UserDTO;
 import com.aleprimo.nova_store.models.Role;
-import com.aleprimo.nova_store.models.RoleName;
+import com.aleprimo.nova_store.models.enums.RoleName;
 import com.aleprimo.nova_store.security.auth.AuthRequest;
 import com.aleprimo.nova_store.security.auth.AuthResponse;
 import com.aleprimo.nova_store.security.auth.RegisterRequest;
