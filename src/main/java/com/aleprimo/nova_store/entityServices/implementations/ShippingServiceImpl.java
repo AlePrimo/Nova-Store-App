@@ -1,6 +1,7 @@
 package com.aleprimo.nova_store.entityServices.implementations;
 
 
+import com.aleprimo.nova_store.controller.mappers.ShippingMapper;
 import com.aleprimo.nova_store.dto.shipping.ShippingRequestDTO;
 import com.aleprimo.nova_store.dto.shipping.ShippingResponseDTO;
 import com.aleprimo.nova_store.entityServices.ShippingService;
