@@ -61,6 +61,9 @@ customerRepository.save(customer);
                 .shippedAt(LocalDateTime.now())
                 .deliveredAt(LocalDateTime.now().plusDays(3))
                 .status(ShippingStatus.PENDING)
+                .city("panama")
+                .country("panama")
+                .postalCode("14996")
                 .build();
 
         shippingRepository.save(shipping);
@@ -90,6 +93,9 @@ customerRepository.save(customer);
                 .address("Otra calle 456")
                 .shippedAt(LocalDateTime.now())
                 .deliveredAt(LocalDateTime.now().plusDays(5))
+                .city("panama")
+                .postalCode("1496")
+                .country("panama")
                 .status(ShippingStatus.SHIPPED)
                 .build();
 
