@@ -7,7 +7,10 @@ import com.aleprimo.nova_store.dto.invoice.InvoiceResponseDTO;
 import com.aleprimo.nova_store.entityServices.implementations.InvoiceServiceImpl;
 import com.aleprimo.nova_store.models.Invoice;
 import com.aleprimo.nova_store.models.Order;
+import com.aleprimo.nova_store.models.enums.OrderStatus;
+import com.aleprimo.nova_store.models.enums.PaymentMethod;
 import com.aleprimo.nova_store.persistence.InvoiceDAO;
+import com.aleprimo.nova_store.persistence.OrderDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -27,7 +30,8 @@ class InvoiceServiceImplTest {
 
     @Mock
     private InvoiceDAO invoiceDAO;
-
+    @Mock
+    private OrderDAO orderDAO;
     @Mock
     private InvoiceMapper invoiceMapper;
 
@@ -44,6 +48,11 @@ class InvoiceServiceImplTest {
 
         Order order = new Order();
         order.setId(1L);
+        order.setPaymentMethod(PaymentMethod.CASH);
+        order.setTotalAmount(BigDecimal.valueOf(100));
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(LocalDateTime.now());
+
 
         invoice = new Invoice();
         invoice.setId(1L);
@@ -68,6 +77,7 @@ class InvoiceServiceImplTest {
         when(invoiceMapper.toEntity(requestDTO)).thenReturn(invoice);
         when(invoiceDAO.save(invoice)).thenReturn(invoice);
         when(invoiceMapper.toDto(invoice)).thenReturn(responseDTO);
+        when(orderDAO.findById(1L)).thenReturn(Optional.of(invoice.getOrder()));
 
         InvoiceResponseDTO result = invoiceService.createInvoice(requestDTO);
 
@@ -102,6 +112,7 @@ class InvoiceServiceImplTest {
     @Test
     void testDeleteInvoice() {
         doNothing().when(invoiceDAO).deleteById(1L);
+        when(invoiceDAO.existById(1L)).thenReturn(true);
 
         invoiceService.deleteInvoice(1L);
 
