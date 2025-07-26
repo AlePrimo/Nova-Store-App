@@ -62,7 +62,8 @@ class InvoiceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.invoiceNumber").value("INV-001"));
+                .andExpect(jsonPath("$.totalAmount").value(100));
+
     }
 
     @Test
@@ -73,25 +74,23 @@ class InvoiceControllerTest {
                 .orderId(2L)
 
 
-                .totalAmount(BigDecimal.valueOf(200))
+                .totalAmount(BigDecimal.valueOf(100))
                 .build();
 
         Mockito.when(invoiceService.getInvoiceById(1L)).thenReturn(dto);
 
         mockMvc.perform(get("/api/invoices/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.invoiceNumber").value("INV-002"));
+                .andExpect(jsonPath("$.totalAmount").value(100));
+
     }
 
     @Test
     void testFindAllInvoices() throws Exception {
         InvoiceResponseDTO dto = InvoiceResponseDTO.builder()
                 .id(1L)
-
                 .orderId(3L)
-
-
-                .totalAmount(BigDecimal.valueOf(300))
+                .totalAmount(BigDecimal.valueOf(100))
                 .build();
 
         Page<InvoiceResponseDTO> page = new PageImpl<>(List.of(dto));
@@ -99,7 +98,9 @@ class InvoiceControllerTest {
 
         mockMvc.perform(get("/api/invoices"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].invoiceNumber").value("INV-003"));
+                .andExpect(jsonPath("$.content[0].totalAmount").value(100));
+
+
     }
 
     @Test
@@ -127,7 +128,8 @@ class InvoiceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.invoiceNumber").value("INV-004"));
+                .andExpect(jsonPath("$.totalAmount").value(100));
+
     }
 
     @Test
