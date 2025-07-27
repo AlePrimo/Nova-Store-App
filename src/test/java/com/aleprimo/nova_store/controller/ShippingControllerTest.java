@@ -13,16 +13,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ShippingController.class)
+@ActiveProfiles("test")
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 class ShippingControllerTest {
 
     @Autowired
@@ -41,6 +46,7 @@ class ShippingControllerTest {
     void setUp() {
         requestDTO = ShippingRequestDTO.builder()
                 .address("123 Calle")
+                .orderId(1L)
                 .city("Ciudad")
                 .country("País")
                 .postalCode("1234")
@@ -48,6 +54,7 @@ class ShippingControllerTest {
 
         responseDTO = ShippingResponseDTO.builder()
                 .id(1L)
+                .orderId(1L)
                 .address("123 Calle")
                 .city("Ciudad")
                 .country("País")
@@ -60,6 +67,7 @@ class ShippingControllerTest {
         when(shippingService.createShipping(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/api/shippings")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
@@ -82,6 +90,7 @@ class ShippingControllerTest {
         when(shippingService.updateShipping(eq(1L), any())).thenReturn(responseDTO);
 
         mockMvc.perform(put("/api/shippings/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
@@ -92,7 +101,8 @@ class ShippingControllerTest {
     void testDeleteShipping() throws Exception {
         doNothing().when(shippingService).deleteShipping(1L);
 
-        mockMvc.perform(delete("/api/shippings/1"))
+        mockMvc.perform(delete("/api/shippings/1").with(csrf()))
+
                 .andExpect(status().isNoContent());
     }
 
