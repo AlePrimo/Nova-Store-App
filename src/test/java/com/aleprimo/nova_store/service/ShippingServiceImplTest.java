@@ -1,26 +1,38 @@
 package com.aleprimo.nova_store.service;
 
-
 import com.aleprimo.nova_store.controller.mappers.ShippingMapper;
 import com.aleprimo.nova_store.dto.shipping.ShippingRequestDTO;
 import com.aleprimo.nova_store.dto.shipping.ShippingResponseDTO;
 import com.aleprimo.nova_store.entityServices.implementations.ShippingServiceImpl;
 import com.aleprimo.nova_store.models.Shipping;
+import com.aleprimo.nova_store.persistence.OrderDAO;
+import com.aleprimo.nova_store.persistence.ShippingDAO;
 import com.aleprimo.nova_store.repository.ShippingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.springframework.data.domain.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class ShippingServiceImplTest {
+
+    @Mock
+    private ShippingDAO shippingDAO;
+
+    @Mock
+    private OrderDAO orderDAO;
 
     @Mock
     private ShippingRepository shippingRepository;
@@ -81,6 +93,7 @@ class ShippingServiceImplTest {
         ShippingResponseDTO result = shippingService.getShippingById(1L);
 
         assertEquals("123 Calle", result.getAddress());
+        verify(shippingRepository).findById(1L);
     }
 
     @Test
@@ -93,6 +106,7 @@ class ShippingServiceImplTest {
         ShippingResponseDTO result = shippingService.updateShipping(1L, requestDTO);
 
         assertEquals("123 Calle", result.getAddress());
+        verify(shippingRepository).save(shipping);
     }
 
     @Test
@@ -108,11 +122,13 @@ class ShippingServiceImplTest {
     void testGetAllShippings() {
         PageRequest pageable = PageRequest.of(0, 10);
         Page<Shipping> page = new PageImpl<>(List.of(shipping));
+
         when(shippingRepository.findAll(pageable)).thenReturn(page);
-        when(shippingMapper.toDto(any())).thenReturn(responseDTO);
+        when(shippingMapper.toDto(shipping)).thenReturn(responseDTO);
 
         Page<ShippingResponseDTO> result = shippingService.getAllShippings(pageable);
 
         assertEquals(1, result.getTotalElements());
+        verify(shippingRepository).findAll(pageable);
     }
 }
