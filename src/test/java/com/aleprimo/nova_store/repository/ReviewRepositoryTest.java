@@ -1,15 +1,16 @@
 package com.aleprimo.nova_store.repository;
 
-import com.aleprimo.nova_store.entity.Review;
-import com.aleprimo.nova_store.entity.Product;
-import com.aleprimo.nova_store.entity.Customer;
-import com.aleprimo.nova_store.repository.ReviewRepository;
+
+import com.aleprimo.nova_store.models.Customer;
+import com.aleprimo.nova_store.models.Product;
+import com.aleprimo.nova_store.models.Review;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,17 +23,35 @@ class ReviewRepositoryTest {
     private ReviewRepository reviewRepository;
 
     @Autowired
-    private TestEntityManager entityManager;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     private Review review;
 
     @BeforeEach
     void setUp() {
-        Product product = Product.builder().name("Producto").build();
-        Customer customer = Customer.builder().firstName("Juan").lastName("Pérez").build();
+        Product product = Product.builder()
+                .name("Producto")
+                .price(BigDecimal.valueOf(100))
+                .stock(10)
+                .description("Descripción del producto")
+                .shortDescription("Desc corta")
+                .imageUrl("imagen.jpg")
+                .sku("SKU123")
+                .isActive(true)
+                .build();
 
-        entityManager.persist(product);
-        entityManager.persist(customer);
+        Customer customer = Customer.builder()
+                .firstName("Juan")
+                .lastName("Pérez")
+                .email("juan.perez@example.com")
+                .isActive(true)
+                .build();
+
+        productRepository.save(product);
+        customerRepository.save(customer);
 
         review = Review.builder()
                 .rating(4)
@@ -41,7 +60,7 @@ class ReviewRepositoryTest {
                 .customer(customer)
                 .build();
 
-        entityManager.persist(review);
+        reviewRepository.save(review);
     }
 
     @Test

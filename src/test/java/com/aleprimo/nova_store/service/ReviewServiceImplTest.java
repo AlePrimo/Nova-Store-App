@@ -140,7 +140,7 @@ class ReviewServiceImplTest {
 
         reviewService.deleteReview(1L);
 
-        verify(reviewDAO).delete(review);
+        verify(reviewDAO).deleteById(review.getId());
     }
 
     @Test

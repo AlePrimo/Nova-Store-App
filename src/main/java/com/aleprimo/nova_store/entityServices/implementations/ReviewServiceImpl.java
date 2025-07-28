@@ -30,14 +30,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewResponseDTO createReview(ReviewRequestDTO dto) {
-        Product product = productRepository.findById(dto.productId())
-            .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + dto.productId()));
-        Customer customer = customerRepository.findById(dto.customerId())
-            .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con id: " + dto.customerId()));
+        Product product = productRepository.findById(dto.getProductId())
+            .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con id: " + dto.getProductId()));
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+            .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con id: " + dto.getCustomerId()));
 
         Review review = Review.builder()
-                .rating(dto.rating())
-                .comment(dto.comment())
+                .rating(dto.getRating())
+                .comment(dto.getComment())
                 .createdAt(LocalDateTime.now())
                 .product(product)
                 .customer(customer)
@@ -63,8 +63,8 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review no encontrado con id: " + id));
 
-        review.setRating(dto.rating());
-        review.setComment(dto.comment());
+        review.setRating(dto.getRating());
+        review.setComment(dto.getComment());
         return reviewMapper.toDTO(reviewRepository.save(review));
     }
 

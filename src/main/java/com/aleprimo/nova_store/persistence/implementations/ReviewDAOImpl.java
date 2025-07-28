@@ -1,8 +1,5 @@
 package com.aleprimo.nova_store.persistence.implementations;
 
-
-import com.aleprimo.nova_store.controller.mappers.ReviewMapper;
-import com.aleprimo.nova_store.dto.review.ReviewResponseDTO;
 import com.aleprimo.nova_store.models.Review;
 import com.aleprimo.nova_store.persistence.ReviewDAO;
 import com.aleprimo.nova_store.repository.ReviewRepository;
@@ -18,30 +15,31 @@ import java.util.Optional;
 public class ReviewDAOImpl implements ReviewDAO {
 
     private final ReviewRepository reviewRepository;
-    private final ReviewMapper reviewMapper;
 
     @Override
-    public ReviewResponseDTO save(ReviewResponseDTO dto) {
-        Review review = reviewMapper.toEntity(dto);
-        return reviewMapper.toDTO(reviewRepository.save(review));
+    public Review save(Review review) {
+        return reviewRepository.save(review);
     }
 
     @Override
-    public Page<ReviewResponseDTO> findAll(Pageable pageable) {
-        return reviewRepository.findAll(pageable).map(reviewMapper::toDTO);
+    public Page<Review> findAll(Pageable pageable) {
+        return reviewRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<ReviewResponseDTO> findById(Long id) {
-        return reviewRepository.findById(id).map(reviewMapper::toDTO);
+    public Optional<Review> findById(Long id) {
+        return reviewRepository.findById(id);
     }
 
     @Override
-    public ReviewResponseDTO update(Long id, ReviewResponseDTO dto) {
-        Review existing = reviewRepository.findById(id).orElseThrow();
-        existing.setRating(dto.rating());
-        existing.setComment(dto.comment());
-        return reviewMapper.toDTO(reviewRepository.save(existing));
+    public Review update(Long id, Review updatedReview) {
+        Review existing = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review no encontrado con ID: " + id));
+
+        existing.setRating(updatedReview.getRating());
+        existing.setComment(updatedReview.getComment());
+
+        return reviewRepository.save(existing);
     }
 
     @Override
