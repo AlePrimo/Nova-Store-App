@@ -1,6 +1,7 @@
 package com.aleprimo.nova_store.persistence.implementations;
 
 
+import com.aleprimo.nova_store.controller.mappers.ReviewMapper;
 import com.aleprimo.nova_store.dto.review.ReviewResponseDTO;
 import com.aleprimo.nova_store.models.Review;
 import com.aleprimo.nova_store.persistence.ReviewDAO;
