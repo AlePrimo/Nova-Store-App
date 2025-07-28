@@ -1,6 +1,7 @@
 package com.aleprimo.nova_store.repository;
 
 
+import com.aleprimo.nova_store.models.Category;
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.Product;
 import com.aleprimo.nova_store.models.Review;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,9 +31,19 @@ class ReviewRepositoryTest {
     private CustomerRepository customerRepository;
 
     private Review review;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @BeforeEach
     void setUp() {
+
+         Category category = Category.builder()
+                .name("Electronics")
+                .description("All electronic items")
+                .isActive(true)
+                .build();
+         categoryRepository.save(category);
+
         Product product = Product.builder()
                 .name("Producto")
                 .price(BigDecimal.valueOf(100))
@@ -41,6 +53,7 @@ class ReviewRepositoryTest {
                 .imageUrl("imagen.jpg")
                 .sku("SKU123")
                 .isActive(true)
+                .category(category)
                 .build();
 
         Customer customer = Customer.builder()
@@ -58,6 +71,7 @@ class ReviewRepositoryTest {
                 .comment("Muy bueno")
                 .product(product)
                 .customer(customer)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         reviewRepository.save(review);

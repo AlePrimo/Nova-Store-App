@@ -18,16 +18,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ReviewController.class)
+@WithMockUser(username = "admin", roles = {"ADMIN"})
+@ActiveProfiles("test")
 class ReviewControllerTest {
 
     @Autowired
@@ -65,6 +70,7 @@ class ReviewControllerTest {
         Mockito.when(reviewService.createReview(any())).thenReturn(responseDTO);
 
         mockMvc.perform(post("/api/reviews")
+                        .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
@@ -96,6 +102,7 @@ class ReviewControllerTest {
         Mockito.when(reviewService.updateReview(eq(1L), any())).thenReturn(responseDTO);
 
         mockMvc.perform(put("/api/reviews/1")
+                        .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
@@ -104,7 +111,8 @@ class ReviewControllerTest {
 
     @Test
     void testDeleteReview() throws Exception {
-        mockMvc.perform(delete("/api/reviews/1"))
+        mockMvc.perform(delete("/api/reviews/1").with(csrf()))
+
                 .andExpect(status().isNoContent());
     }
 }
