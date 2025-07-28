@@ -1,30 +1,40 @@
 package com.aleprimo.nova_store.controller.mappers;
 
-
+import com.aleprimo.nova_store.dto.review.ReviewRequestDTO;
 import com.aleprimo.nova_store.dto.review.ReviewResponseDTO;
+import com.aleprimo.nova_store.models.Customer;
+import com.aleprimo.nova_store.models.Product;
 import com.aleprimo.nova_store.models.Review;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class ReviewMapper {
 
     public ReviewResponseDTO toDTO(Review review) {
-        return new ReviewResponseDTO(
-            review.getId(),
-            review.getRating(),
-            review.getComment(),
-            review.getCreatedAt(),
-            review.getProduct().getId(),
-            review.getCustomer().getId()
-        );
+        return ReviewResponseDTO.builder()
+                .id(review.getId())
+                .rating(review.getRating())
+                .comment(review.getComment())
+                .createdAt(review.getCreatedAt())
+                .productId(review.getProduct().getId())
+                .customerId(review.getCustomer().getId())
+                .build();
     }
 
-    public Review toEntity(ReviewResponseDTO dto) {
+    public Review toEntity(ReviewRequestDTO dto) {
         return Review.builder()
-                .id(dto.id())
-                .rating(dto.rating())
-                .comment(dto.comment())
-                .createdAt(dto.createdAt())
+                .rating(dto.getRating())
+                .comment(dto.getComment())
+                .createdAt(LocalDateTime.now())
+                .product(Product.builder().id(dto.getProductId()).build())
+                .customer(Customer.builder().id(dto.getCustomerId()).build())
                 .build();
+    }
+
+    public void updateEntityFromDto(ReviewRequestDTO dto, Review entity) {
+        entity.setRating(dto.getRating());
+        entity.setComment(dto.getComment());
     }
 }

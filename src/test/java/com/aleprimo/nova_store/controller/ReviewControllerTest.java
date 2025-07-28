@@ -1,8 +1,9 @@
 package com.aleprimo.nova_store.controller;
 
-import com.aleprimo.nova_store.dto.request.ReviewRequestDTO;
-import com.aleprimo.nova_store.dto.response.ReviewResponseDTO;
-import com.aleprimo.nova_store.service.ReviewService;
+
+import com.aleprimo.nova_store.dto.review.ReviewRequestDTO;
+import com.aleprimo.nova_store.dto.review.ReviewResponseDTO;
+import com.aleprimo.nova_store.entityServices.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
