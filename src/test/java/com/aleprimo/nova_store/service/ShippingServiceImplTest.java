@@ -8,10 +8,9 @@ import com.aleprimo.nova_store.models.Order;
 import com.aleprimo.nova_store.models.Shipping;
 import com.aleprimo.nova_store.models.enums.OrderStatus;
 import com.aleprimo.nova_store.models.enums.PaymentMethod;
+import com.aleprimo.nova_store.models.enums.ShippingStatus;
 import com.aleprimo.nova_store.persistence.OrderDAO;
 import com.aleprimo.nova_store.persistence.ShippingDAO;
-import com.aleprimo.nova_store.repository.OrderRepository;
-import com.aleprimo.nova_store.repository.ShippingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,12 +38,8 @@ class ShippingServiceImplTest {
     private OrderDAO orderDAO;
 
     @Mock
-    private ShippingRepository shippingRepository;
-
-    @Mock
     private ShippingMapper shippingMapper;
-@Mock
-private OrderRepository orderRepository;
+
     @InjectMocks
     private ShippingServiceImpl shippingService;
 
@@ -63,17 +57,15 @@ private OrderRepository orderRepository;
                 .orderStatus(OrderStatus.SHIPPED)
                 .build();
 
-        orderRepository.save(order);
-
         shipping = Shipping.builder()
+                .id(1L)
                 .order(order)
                 .address("123 Calle")
                 .city("Ciudad")
                 .country("País")
                 .postalCode("1234")
+                .status(ShippingStatus.PENDING)
                 .build();
-
-        shippingRepository.save(shipping);
 
         requestDTO = ShippingRequestDTO.builder()
                 .orderId(1L)
@@ -81,6 +73,7 @@ private OrderRepository orderRepository;
                 .city("Ciudad")
                 .country("País")
                 .postalCode("1234")
+                .status(ShippingStatus.PENDING)
                 .build();
 
         responseDTO = ShippingResponseDTO.builder()
@@ -89,53 +82,55 @@ private OrderRepository orderRepository;
                 .city("Ciudad")
                 .country("País")
                 .postalCode("1234")
+                .status(ShippingStatus.PENDING)
+                .orderId(1L)
                 .build();
     }
 
     @Test
     void testCreateShipping() {
         when(orderDAO.findById(1L)).thenReturn(Optional.of(order));
-        when(shippingMapper.toEntity(requestDTO)).thenReturn(shipping);
-        when(shippingRepository.save(any(Shipping.class))).thenReturn(shipping);
-        when(shippingMapper.toDto(any(Shipping.class))).thenReturn(responseDTO);
+        when(shippingDAO.save(any(Shipping.class))).thenReturn(shipping);
+        when(shippingMapper.toDto(shipping)).thenReturn(responseDTO);
 
         ShippingResponseDTO result = shippingService.createShipping(requestDTO);
 
         assertEquals("123 Calle", result.getAddress());
-        verify(shippingRepository).save(any(Shipping.class));
+        verify(shippingDAO).save(any(Shipping.class));
     }
 
     @Test
     void testGetShippingById() {
-        when(shippingRepository.findById(1L)).thenReturn(Optional.of(shipping));
+        when(shippingDAO.findById(1L)).thenReturn(Optional.of(shipping));
         when(shippingMapper.toDto(shipping)).thenReturn(responseDTO);
 
         ShippingResponseDTO result = shippingService.getShippingById(1L);
 
         assertEquals("123 Calle", result.getAddress());
-        verify(shippingRepository).findById(1L);
+        verify(shippingDAO).findById(1L);
     }
 
     @Test
     void testUpdateShipping() {
-        when(shippingRepository.findById(1L)).thenReturn(Optional.of(shipping));
+        when(shippingDAO.findById(1L)).thenReturn(Optional.of(shipping));
         doNothing().when(shippingMapper).updateEntityFromDto(requestDTO, shipping);
-        when(shippingRepository.save(shipping)).thenReturn(shipping);
+        when(shippingDAO.save(shipping)).thenReturn(shipping);
         when(shippingMapper.toDto(shipping)).thenReturn(responseDTO);
 
         ShippingResponseDTO result = shippingService.updateShipping(1L, requestDTO);
 
         assertEquals("123 Calle", result.getAddress());
-        verify(shippingRepository).save(shipping);
+        verify(shippingDAO).save(shipping);
     }
 
     @Test
     void testDeleteShipping() {
-        when(shippingRepository.findById(1L)).thenReturn(Optional.of(shipping));
+        when(shippingDAO.existById(1L)).thenReturn(true);
+        doNothing().when(shippingDAO).deleteById(1L);
 
         shippingService.deleteShipping(1L);
 
-        verify(shippingRepository).delete(shipping);
+        verify(shippingDAO).deleteById(1L);
     }
 
     @Test
