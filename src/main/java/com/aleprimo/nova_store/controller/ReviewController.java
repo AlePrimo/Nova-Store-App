@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ReviewResponseDTO create(@Valid @RequestBody ReviewRequestDTO dto) {
         return reviewService.createReview(dto);
     }
@@ -40,6 +42,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         reviewService.deleteReview(id);
     }
