@@ -1,4 +1,4 @@
-package com.aleprimo.nova_store.service.impl;
+package com.aleprimo.nova_store.service;
 
 
 import com.aleprimo.nova_store.controller.mappers.ReviewMapper;
@@ -44,7 +44,16 @@ class ReviewServiceImplTest {
         ReviewRequestDTO dto = new ReviewRequestDTO(5, "Excelente", 1L, 1L);
         Review entity = new Review();
         Review savedEntity = new Review();
-        ReviewResponseDTO responseDTO = new ReviewResponseDTO(1L, 5, "Excelente", 1L, 1L);
+        ReviewResponseDTO responseDTO = ReviewResponseDTO.builder()
+                .id(1L)
+                .rating(5)
+                .comment("Excelente")
+                .productId(1L)
+                .customerId(1L)
+                .build();
+
+
+
 
         when(reviewMapper.toEntity(dto)).thenReturn(entity);
         when(reviewDAO.save(entity)).thenReturn(savedEntity);
@@ -62,7 +71,18 @@ class ReviewServiceImplTest {
     void testGetReviewById_found() {
         Long id = 1L;
         Review entity = new Review();
-        ReviewResponseDTO responseDTO = new ReviewResponseDTO(id, 4, "Muy bueno", 2L, 3L);
+        ReviewResponseDTO responseDTO =  ReviewResponseDTO.builder()
+                .id(id)
+                .rating(4)
+                .comment("Muy Bueno")
+                .productId(2L)
+                .customerId(3L)
+                .build();
+
+
+
+
+
 
         when(reviewDAO.findById(id)).thenReturn(Optional.of(entity));
         when(reviewMapper.toDTO(entity)).thenReturn(responseDTO);
@@ -127,7 +147,7 @@ class ReviewServiceImplTest {
 
 
 
-                
+
 
         when(reviewDAO.findById(id)).thenReturn(Optional.of(entity));
         when(reviewDAO.save(entity)).thenReturn(updated);
@@ -155,20 +175,20 @@ class ReviewServiceImplTest {
     @Test
     void testDeleteReview_found() {
         Long id = 1L;
-        when(reviewDAO.existsById(id)).thenReturn(true);
+        when(reviewDAO.existById(id)).thenReturn(true);
 
         reviewService.deleteReview(id);
 
-        verify(reviewDAO).existsById(id);
+        verify(reviewDAO).existById(id);
         verify(reviewDAO).deleteById(id);
     }
 
     @Test
     void testDeleteReview_notFound() {
         Long id = 100L;
-        when(reviewDAO.existsById(id)).thenReturn(false);
+        when(reviewDAO.existById(id)).thenReturn(false);
 
         assertThrows(ResourceNotFoundException.class, () -> reviewService.deleteReview(id));
-        verify(reviewDAO).existsById(id);
+        verify(reviewDAO).existById(id);
     }
 }
