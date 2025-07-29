@@ -1,20 +1,19 @@
-package com.aleprimo.nova_store.service;
+package com.aleprimo.nova_store.service.impl;
 
 
 import com.aleprimo.nova_store.controller.mappers.ReviewMapper;
 import com.aleprimo.nova_store.dto.review.ReviewRequestDTO;
 import com.aleprimo.nova_store.dto.review.ReviewResponseDTO;
 import com.aleprimo.nova_store.entityServices.implementations.ReviewServiceImpl;
-import com.aleprimo.nova_store.models.Customer;
-import com.aleprimo.nova_store.models.Product;
+import com.aleprimo.nova_store.handler.exceptions.ResourceNotFoundException;
 import com.aleprimo.nova_store.models.Review;
 import com.aleprimo.nova_store.persistence.ReviewDAO;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 class ReviewServiceImplTest {
-
-    @InjectMocks
-    private ReviewServiceImpl reviewService;
 
     @Mock
     private ReviewDAO reviewDAO;
@@ -34,119 +29,146 @@ class ReviewServiceImplTest {
     @Mock
     private ReviewMapper reviewMapper;
 
-    private Review review;
-    private ReviewRequestDTO requestDTO;
-    private ReviewResponseDTO responseDTO;
+    @InjectMocks
+    private ReviewServiceImpl reviewService;
+
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
-        Product product = Product.builder().id(1L).build();
-        Customer customer = Customer.builder().id(1L).build();
-
-        review = Review.builder()
-                .id(1L)
-                .rating(4)
-                .comment("Great product")
-                .product(product)
-                .customer(customer)
-                .build();
-
-        requestDTO = ReviewRequestDTO.builder()
-                .rating(4)
-                .comment("Great product")
-                .productId(1L)
-                .customerId(1L)
-                .build();
-
-        responseDTO = ReviewResponseDTO.builder()
-                .id(1L)
-                .rating(4)
-                .comment("Great product")
-                .productId(1L)
-                .customerId(1L)
-                .build();
+        closeable = MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testCreateReview() {
-        when(reviewMapper.toEntity(requestDTO)).thenReturn(review);
-        when(reviewDAO.save(review)).thenReturn(review);
-        when(reviewMapper.toDTO(review)).thenReturn(responseDTO);
+        ReviewRequestDTO dto = new ReviewRequestDTO(5, "Excelente", 1L, 1L);
+        Review entity = new Review();
+        Review savedEntity = new Review();
+        ReviewResponseDTO responseDTO = new ReviewResponseDTO(1L, 5, "Excelente", 1L, 1L);
 
-        ReviewResponseDTO result = reviewService.createReview(requestDTO);
+        when(reviewMapper.toEntity(dto)).thenReturn(entity);
+        when(reviewDAO.save(entity)).thenReturn(savedEntity);
+        when(reviewMapper.toDTO(savedEntity)).thenReturn(responseDTO);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(reviewDAO).save(review);
+        ReviewResponseDTO result = reviewService.createReview(dto);
+
+        assertEquals(responseDTO, result);
+        verify(reviewMapper).toEntity(dto);
+        verify(reviewDAO).save(entity);
+        verify(reviewMapper).toDTO(savedEntity);
     }
 
     @Test
-    void testGetReviewById() {
-        when(reviewDAO.findById(1L)).thenReturn(Optional.of(review));
-        when(reviewMapper.toDTO(review)).thenReturn(responseDTO);
+    void testGetReviewById_found() {
+        Long id = 1L;
+        Review entity = new Review();
+        ReviewResponseDTO responseDTO = new ReviewResponseDTO(id, 4, "Muy bueno", 2L, 3L);
 
-        ReviewResponseDTO result = reviewService.getReviewById(1L);
+        when(reviewDAO.findById(id)).thenReturn(Optional.of(entity));
+        when(reviewMapper.toDTO(entity)).thenReturn(responseDTO);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(reviewDAO).findById(1L);
+        ReviewResponseDTO result = reviewService.getReviewById(id);
+
+        assertEquals(responseDTO, result);
+        verify(reviewDAO).findById(id);
+        verify(reviewMapper).toDTO(entity);
     }
 
     @Test
-    void testGetReviewById_NotFound() {
-        when(reviewDAO.findById(1L)).thenReturn(Optional.empty());
+    void testGetReviewById_notFound() {
+        Long id = 99L;
+        when(reviewDAO.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> reviewService.getReviewById(1L));
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.getReviewById(id));
+        verify(reviewDAO).findById(id);
     }
 
     @Test
     void testGetAllReviews() {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Review> reviewPage = new PageImpl<>(List.of(review));
+        Review entity = new Review();
+        ReviewResponseDTO responseDTO = ReviewResponseDTO.builder()
+                .id(1L)
+                .rating(3)
+                .comment("Bueno")
+                .productId(1L)
+                .customerId(2L)
+                .build();
 
-        when(reviewDAO.findAll(pageable)).thenReturn(reviewPage);
-        when(reviewMapper.toDTO(review)).thenReturn(responseDTO);
+
+
+
+        PageRequest pageable = PageRequest.of(0, 10);
+
+        Page<Review> page = new PageImpl<>(List.of(entity));
+        when(reviewDAO.findAll(pageable)).thenReturn(page);
+        when(reviewMapper.toDTO(entity)).thenReturn(responseDTO);
 
         Page<ReviewResponseDTO> result = reviewService.getAllReviews(pageable);
 
-        assertNotNull(result);
-        assertEquals(1, result.getContent().size());
+        assertEquals(1, result.getTotalElements());
+        assertEquals(responseDTO, result.getContent().get(0));
         verify(reviewDAO).findAll(pageable);
     }
 
     @Test
-    void testUpdateReview() {
-        when(reviewDAO.findById(1L)).thenReturn(Optional.of(review));
-        when(reviewDAO.save(review)).thenReturn(review);
-        when(reviewMapper.toDTO(review)).thenReturn(responseDTO);
+    void testUpdateReview_found() {
+        Long id = 1L;
+        ReviewRequestDTO dto = new ReviewRequestDTO(4, "Modificado", 2L, 3L);
+        Review entity = new Review();
+        Review updated = new Review();
+        ReviewResponseDTO responseDTO = ReviewResponseDTO.builder()
+                .id(id)
+                .rating(4)
+                .comment("Modificado")
+                .productId(2L)
+                .customerId(3L)
+                .build();
 
-        ReviewResponseDTO result = reviewService.updateReview(1L, requestDTO);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals("Great product", result.getComment());
+
+
+                
+
+        when(reviewDAO.findById(id)).thenReturn(Optional.of(entity));
+        when(reviewDAO.save(entity)).thenReturn(updated);
+        when(reviewMapper.toDTO(updated)).thenReturn(responseDTO);
+
+        ReviewResponseDTO result = reviewService.updateReview(id, dto);
+
+        assertEquals(responseDTO, result);
+        verify(reviewDAO).findById(id);
+        verify(reviewDAO).save(entity);
+        verify(reviewMapper).toDTO(updated);
     }
 
     @Test
-    void testUpdateReview_NotFound() {
-        when(reviewDAO.findById(1L)).thenReturn(Optional.empty());
+    void testUpdateReview_notFound() {
+        Long id = 99L;
+        ReviewRequestDTO dto = new ReviewRequestDTO(3, "Comentario", 2L, 1L);
 
-        assertThrows(EntityNotFoundException.class, () -> reviewService.updateReview(1L, requestDTO));
+        when(reviewDAO.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.updateReview(id, dto));
+        verify(reviewDAO).findById(id);
     }
 
     @Test
-    void testDeleteReview() {
-        when(reviewDAO.findById(1L)).thenReturn(Optional.of(review));
+    void testDeleteReview_found() {
+        Long id = 1L;
+        when(reviewDAO.existsById(id)).thenReturn(true);
 
-        reviewService.deleteReview(1L);
+        reviewService.deleteReview(id);
 
-        verify(reviewDAO).deleteById(review.getId());
+        verify(reviewDAO).existsById(id);
+        verify(reviewDAO).deleteById(id);
     }
 
     @Test
-    void testDeleteReview_NotFound() {
-        when(reviewDAO.findById(1L)).thenReturn(Optional.empty());
+    void testDeleteReview_notFound() {
+        Long id = 100L;
+        when(reviewDAO.existsById(id)).thenReturn(false);
 
-        assertThrows(EntityNotFoundException.class, () -> reviewService.deleteReview(1L));
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.deleteReview(id));
+        verify(reviewDAO).existsById(id);
     }
 }
