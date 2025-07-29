@@ -6,7 +6,11 @@ import com.aleprimo.nova_store.dto.review.ReviewRequestDTO;
 import com.aleprimo.nova_store.dto.review.ReviewResponseDTO;
 import com.aleprimo.nova_store.entityServices.implementations.ReviewServiceImpl;
 import com.aleprimo.nova_store.handler.exceptions.ResourceNotFoundException;
+import com.aleprimo.nova_store.models.Customer;
+import com.aleprimo.nova_store.models.Product;
 import com.aleprimo.nova_store.models.Review;
+import com.aleprimo.nova_store.persistence.CustomerDAO;
+import com.aleprimo.nova_store.persistence.ProductDAO;
 import com.aleprimo.nova_store.persistence.ReviewDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +32,11 @@ class ReviewServiceImplTest {
 
     @Mock
     private ReviewMapper reviewMapper;
+    @Mock
+    private ProductDAO productDAO;
+
+    @Mock
+    private CustomerDAO customerDAO;
 
     @InjectMocks
     private ReviewServiceImpl reviewService;
@@ -147,7 +156,8 @@ class ReviewServiceImplTest {
 
 
 
-
+        when(productDAO.findById(anyLong())).thenReturn(Optional.of(new Product()));
+        when(customerDAO.findById(anyLong())).thenReturn(Optional.of(new Customer()));
 
         when(reviewDAO.findById(id)).thenReturn(Optional.of(entity));
         when(reviewDAO.save(entity)).thenReturn(updated);
@@ -167,28 +177,42 @@ class ReviewServiceImplTest {
         ReviewRequestDTO dto = new ReviewRequestDTO(3, "Comentario", 2L, 1L);
 
         when(reviewDAO.findById(id)).thenReturn(Optional.empty());
-
+        when(productDAO.findById(anyLong())).thenReturn(Optional.of(new Product()));
+        when(customerDAO.findById(anyLong())).thenReturn(Optional.of(new Customer()));
         assertThrows(ResourceNotFoundException.class, () -> reviewService.updateReview(id, dto));
         verify(reviewDAO).findById(id);
     }
 
+
     @Test
     void testDeleteReview_found() {
-        Long id = 1L;
-        when(reviewDAO.existById(id)).thenReturn(true);
+        Long reviewId = 1L;
+        Review review = new Review();
+        review.setId(reviewId);
 
-        reviewService.deleteReview(id);
+        when(reviewDAO.findById(reviewId)).thenReturn(Optional.of(review));
 
-        verify(reviewDAO).existById(id);
-        verify(reviewDAO).deleteById(id);
+        reviewService.deleteReview(reviewId);
+
+        verify(reviewDAO, times(1)).findById(reviewId);
+        verify(reviewDAO, times(1)).deleteById(review.getId());
     }
 
-    @Test
-    void testDeleteReview_notFound() {
-        Long id = 100L;
-        when(reviewDAO.existById(id)).thenReturn(false);
 
-        assertThrows(ResourceNotFoundException.class, () -> reviewService.deleteReview(id));
-        verify(reviewDAO).existById(id);
-    }
+
+
+@Test
+void testDeleteReview_notFound() {
+    Long reviewId = 100L;
+
+    when(reviewDAO.findById(reviewId)).thenReturn(Optional.empty());
+
+    assertThrows(ResourceNotFoundException.class, () -> {
+        reviewService.deleteReview(reviewId);
+    });
+
+    verify(reviewDAO, times(1)).findById(reviewId);
+    verify(reviewDAO, never()).deleteById(any());
+}
+
 }
