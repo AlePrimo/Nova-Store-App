@@ -103,14 +103,14 @@ class AddressServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Address> addressPage = new PageImpl<>(List.of(address), pageable, 1);
 
-        when(addressDAO.findAllPage(pageable)).thenReturn(addressPage);
+        when(addressDAO.findAll(pageable)).thenReturn(addressPage);
         when(addressMapper.toDTO(address)).thenReturn(responseDTO);
 
         Page<AddressResponseDTO> result = addressService.getAllAddresses(pageable);
 
         assertEquals(1, result.getTotalElements());
         assertEquals(responseDTO, result.getContent().get(0));
-        verify(addressDAO, times(1)).findAllPage(pageable);
+        verify(addressDAO, times(1)).findAll(pageable);
     }
 
     @Test

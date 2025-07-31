@@ -13,6 +13,6 @@ public interface AddressDAO {
     Address save(Address address);
     Optional<Address> findById(Long id);
     void deleteById(Long id);
-    Page<Address> findAllPage(Pageable page);
+    Page<Address> findAll(Pageable page);
     boolean existById(Long id);
 }

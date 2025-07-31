@@ -66,7 +66,7 @@ class AddressControllerTest {
     void testCreateAddress() throws Exception {
         Mockito.when(addressService.createAddress(any())).thenReturn(responseDTO);
 
-        mockMvc.perform(post("/api/addresses")
+        mockMvc.perform(post("/api/v1/addresses")
                         .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))

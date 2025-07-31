@@ -34,8 +34,8 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public Page<Address> findAllPage(Pageable pageable) {
-        return addressRepository.findAllPage(pageable);
+    public Page<Address> findAll(Pageable pageable) {
+        return addressRepository.findAll(pageable);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.aleprimo.nova_store.entityServices.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +23,14 @@ public class AddressController {
 
     @Operation(summary = "Crear una nueva dirección")
     @PostMapping
+
     public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO dto) {
         return ResponseEntity.ok(addressService.createAddress(dto));
     }
 
     @Operation(summary = "Obtener dirección por ID")
     @GetMapping("/{id}")
+
     public ResponseEntity<AddressResponseDTO> getAddressById(@PathVariable Long id) {
         return ResponseEntity.ok(addressService.getAddressById(id));
     }
