@@ -12,5 +12,5 @@ public interface ReviewDAO {
     Optional<Review> findById(Long id);
     Review update(Long id, Review updatedReview);
     void deleteById(Long id);
-    boolean existById(Long id);
+
 }

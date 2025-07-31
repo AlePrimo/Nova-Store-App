@@ -47,8 +47,5 @@ public class ReviewDAOImpl implements ReviewDAO {
         reviewRepository.deleteById(id);
     }
 
-    @Override
-    public boolean existById(Long id) {
-        return reviewRepository.existById(id);
-    }
+
 }
