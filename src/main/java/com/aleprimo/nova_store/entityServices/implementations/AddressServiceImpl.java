@@ -68,9 +68,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void deleteAddress(Long id) {
-        if (!addressDAO.existById(id)) {
-            throw new ResourceNotFoundException("Address no encontrada con id " + id);
-        }
+        Address address = addressDAO.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Address no encontrada con id " + id));
         addressDAO.deleteById(id);
     }
 }

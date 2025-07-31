@@ -11,13 +11,16 @@ import com.aleprimo.nova_store.persistence.AddressDAO;
 import com.aleprimo.nova_store.persistence.CustomerDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import org.springframework.data.domain.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -61,6 +64,7 @@ class AddressServiceImplTest {
                 .country("FC")
                 .customer(customer)
                 .build();
+
 
         requestDTO = AddressRequestDTO.builder()
                 .street("Fake St")
@@ -112,10 +116,11 @@ class AddressServiceImplTest {
     @Test
     void testDeleteAddress() {
         when(addressDAO.findById(1L)).thenReturn(Optional.of(address));
-        doNothing().when(addressDAO).deleteById(address.getId());
+        doNothing().when(addressDAO).deleteById(1L);
 
-        addressService.deleteAddress(1L);
+        assertDoesNotThrow(() -> addressService.deleteAddress(1L));
 
-        verify(addressDAO, times(1)).deleteById(address.getId());
+        verify(addressDAO, times(1)).findById(1L);
+        verify(addressDAO, times(1)).deleteById(1L);
     }
 }
