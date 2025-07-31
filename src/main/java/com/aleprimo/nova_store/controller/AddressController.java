@@ -5,6 +5,7 @@ import com.aleprimo.nova_store.dto.adress.AddressRequestDTO;
 import com.aleprimo.nova_store.dto.adress.AddressResponseDTO;
 import com.aleprimo.nova_store.entityServices.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/addresses")
 @RequiredArgsConstructor
+@Tag(name = "Adress Controller", description = "CRUD de Adress")
 public class AddressController {
 
     private final AddressService addressService;
 
     @Operation(summary = "Crear una nueva dirección")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
 
     public ResponseEntity<AddressResponseDTO> createAddress(@Valid @RequestBody AddressRequestDTO dto) {
