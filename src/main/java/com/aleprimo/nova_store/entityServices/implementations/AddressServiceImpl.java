@@ -41,7 +41,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Page<AddressResponseDTO> getAllAddresses(Pageable pageable) {
-        return addressDAO.findAll().stream()
+        return addressDAO.findAllPage(pageable).stream()
                 .map(mapper::toDTO)
                 .collect(java.util.stream.Collectors.collectingAndThen(
                         java.util.stream.Collectors.toList(),

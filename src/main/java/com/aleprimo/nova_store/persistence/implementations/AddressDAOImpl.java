@@ -5,6 +5,8 @@ import com.aleprimo.nova_store.models.Address;
 import com.aleprimo.nova_store.persistence.AddressDAO;
 import com.aleprimo.nova_store.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,8 +34,8 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public List<Address> findAll() {
-        return addressRepository.findAll();
+    public Page<Address> findAllPage(Pageable pageable) {
+        return addressRepository.findAllPage(pageable);
     }
 
     @Override
