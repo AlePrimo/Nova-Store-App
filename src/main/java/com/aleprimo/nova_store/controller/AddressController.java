@@ -7,6 +7,7 @@ import com.aleprimo.nova_store.entityServices.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +41,8 @@ public class AddressController {
 
     @Operation(summary = "Listar todas las direcciones")
     @GetMapping
-    public ResponseEntity<List<AddressResponseDTO>> getAllAddresses(Pageable pageable) {
-        return ResponseEntity.ok(addressService.getAllAddresses(pageable).getContent());
+    public ResponseEntity<Page<AddressResponseDTO>> getAllAddresses(Pageable pageable) {
+        return ResponseEntity.ok(addressService.getAllAddresses(pageable));
     }
 
     @Operation(summary = "Actualizar dirección")
