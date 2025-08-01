@@ -85,8 +85,8 @@ class AddressControllerTest {
         Mockito.when(addressService.getAllAddresses(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/api/v1/addresses"))
-                .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.content[0].id").value(1L));
+                .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(1L));
     }
 
     @Test
