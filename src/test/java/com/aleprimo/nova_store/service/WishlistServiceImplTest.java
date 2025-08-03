@@ -13,6 +13,7 @@ import com.aleprimo.nova_store.persistence.ProductDAO;
 import com.aleprimo.nova_store.persistence.WishlistDAO;
 import com.aleprimo.nova_store.repository.CustomerRepository;
 import com.aleprimo.nova_store.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,7 +82,7 @@ class WishlistServiceImplTest {
     @Test
     void create_ShouldReturnWishlistResponseDTO() {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-        when(productRepository.findAllById(Set.of(1L))).thenReturn(products);
+        when(productRepository.findAllById(List.of(1L))).thenReturn(products);
         when(wishlistMapper.toEntity(requestDTO, customer, products)).thenReturn(wishlist);
         when(wishlistDAO.save(wishlist)).thenReturn(wishlist);
         when(wishlistMapper.toDTO(wishlist)).thenReturn(responseDTO);
@@ -133,9 +134,9 @@ class WishlistServiceImplTest {
     @Test
     void update_ShouldReturnUpdatedDTO() {
         when(wishlistDAO.findById(1L)).thenReturn(Optional.of(wishlist));
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-        when(productRepository.findAllById(Set.of(1L))).thenReturn(products);
-        when(wishlistDAO.save(wishlist)).thenReturn(wishlist);
+        when(customerDAO.findById(1L)).thenReturn(Optional.of(customer));
+        when(productDAO.findById(1L)).thenReturn(Optional.of(products.get(0)));
+        when(wishlistDAO.save(any(Wishlist.class))).thenReturn(wishlist);
         when(wishlistMapper.toDTO(wishlist)).thenReturn(responseDTO);
 
         WishlistResponseDTO result = wishlistService.updateWishlist(1L, requestDTO);
@@ -147,7 +148,7 @@ class WishlistServiceImplTest {
     void update_ShouldThrowException_WhenWishlistNotFound() {
         when(wishlistDAO.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> wishlistService.updateWishlist(1L, requestDTO));
+        assertThrows(EntityNotFoundException.class, () -> wishlistService.updateWishlist(1L, requestDTO));
     }
 
     @Test
