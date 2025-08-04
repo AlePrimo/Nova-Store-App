@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WishlistController.class)
 @ActiveProfiles("test")
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 class WishlistControllerTest {
 
     @Autowired
@@ -44,12 +46,14 @@ class WishlistControllerTest {
     @BeforeEach
     void setUp() {
         requestDTO = WishlistRequestDTO.builder()
+                .name("WISHLIST")
                 .customerId(1L)
                 .productIds(List.of(1L, 2L))
                 .build();
 
         responseDTO = WishlistResponseDTO.builder()
                 .id(1L)
+                .name("WISHLIST")
                 .customerId(1L)
                 .productIds(List.of(1L, 2L))
                 .build();
