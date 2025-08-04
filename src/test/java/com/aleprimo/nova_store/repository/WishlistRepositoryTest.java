@@ -1,6 +1,7 @@
 package com.aleprimo.nova_store.repository;
 
 
+import com.aleprimo.nova_store.models.Category;
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.Product;
 import com.aleprimo.nova_store.models.Wishlist;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -29,10 +31,23 @@ class WishlistRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Wishlist wishlist;
 
     @BeforeEach
     void setUp() {
+
+        Category category = Category.builder()
+                .createdAt(LocalDateTime.now())
+                .description("ELECTRONICA")
+                .name("TECNOLOGIA")
+                .isActive(true)
+                 .build();
+        categoryRepository.save(category);
+
+
         Customer customer = Customer.builder()
                 .firstName("Ana")
                 .lastName("Pérez")
@@ -41,11 +56,14 @@ class WishlistRepositoryTest {
                 .build();
         customer = customerRepository.save(customer);
 
+
         Product product1 = productRepository.save(Product.builder()
                 .name("Producto 1")
                 .price(BigDecimal.valueOf(100))
                 .stock(10)
+                        .category(category)
                 .sku("SKU1")
+
                 .isActive(true)
                 .build());
 
@@ -54,6 +72,7 @@ class WishlistRepositoryTest {
                 .price(BigDecimal.valueOf(200))
                 .stock(20)
                 .sku("SKU2")
+                        .category(category)
                 .isActive(true)
                 .build());
 
