@@ -31,7 +31,7 @@ public class PurchaseHistoryServiceImpl implements PurchaseHistoryService {
     }
 
     private PurchaseHistoryDTO mapToPurchaseHistoryDTO(Order order) {
-        Shipping shipping = shippingRepository.findByOrderId(order.getId()).orElse();
+        Shipping shipping = shippingRepository.findByOrderId(order.getId()).orElse(null);
 
         return PurchaseHistoryDTO.builder()
                 .orderId(order.getId())
