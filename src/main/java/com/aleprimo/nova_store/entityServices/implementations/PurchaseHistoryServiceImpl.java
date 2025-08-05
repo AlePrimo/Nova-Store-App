@@ -31,20 +31,20 @@ public class PurchaseHistoryServiceImpl implements PurchaseHistoryService {
     }
 
     private PurchaseHistoryDTO mapToPurchaseHistoryDTO(Order order) {
-        Shipping shipping = shippingRepository.findByOrderId(order.getId()).orElse(null);
+        Shipping shipping = shippingRepository.findByOrderId(order.getId()).orElse();
 
         return PurchaseHistoryDTO.builder()
                 .orderId(order.getId())
-                .orderDate(order.getOrderDate())
+                .orderDate(order.getCreatedAt())
                 .totalAmount(order.getTotalAmount())
-                .paymentMethod(order.getPayment().getPaymentMethod())
-                .orderStatus(order.getStatus())
-                .items(mapOrderItems(order.getItems()))
+                .paymentMethod(order.getPaymentMethod())
+                .orderStatus(order.getOrderStatus())
+                .items(mapOrderItems(order.getOrderItems()))
                 .shippingAddress(shipping != null ? shipping.getAddress() : null)
                 .shippingCity(shipping != null ? shipping.getCity() : null)
                 .shippingPostalCode(shipping != null ? shipping.getPostalCode() : null)
                 .shippingCountry(shipping != null ? shipping.getCountry() : null)
-                .shippingStatus(shipping != null ? shipping.getShippingStatus() : null)
+                .shippingStatus(shipping != null ? shipping.getStatus() : null)
                 .shippedAt(shipping != null ? shipping.getShippedAt() : null)
                 .deliveredAt(shipping != null ? shipping.getDeliveredAt() : null)
                 .build();
@@ -55,7 +55,7 @@ public class PurchaseHistoryServiceImpl implements PurchaseHistoryService {
                 .map(item -> OrderItemDTO.builder()
                         .productName(item.getProduct().getName())
                         .quantity(item.getQuantity())
-                        .price(item.getPrice())
+                        .price(item.getUnitPrice())
                         .build())
                 .collect(Collectors.toList());
     }
