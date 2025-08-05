@@ -1,6 +1,9 @@
 package com.aleprimo.nova_store.service;
 
 
+import com.aleprimo.nova_store.controller.mappers.PurchaseHistoryMapper;
+import com.aleprimo.nova_store.dto.purchaseHistory.OrderItemDTO;
+import com.aleprimo.nova_store.dto.purchaseHistory.PurchaseHistoryDTO;
 import com.aleprimo.nova_store.entityServices.implementations.PurchaseHistoryServiceImpl;
 import com.aleprimo.nova_store.models.Customer;
 import com.aleprimo.nova_store.models.Order;
@@ -52,15 +55,15 @@ class PurchaseHistoryServiceImplTest {
     void testGetPurchaseHistoryByCustomerId() {
         Order order = Order.builder()
                 .id(1L)
-                .orderDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .totalAmount(BigDecimal.valueOf(100))
                 .paymentMethod(PaymentMethod.CREDIT_CARD)
-                .status(OrderStatus.PROCESSING)
+                .orderStatus(OrderStatus.PROCESSING)
                 .customer(customer)
                 .orderItems(Collections.singletonList(OrderItem.builder()
                         .product(Product.builder().name("Producto 1").build())
                         .quantity(2)
-                        .price(BigDecimal.valueOf(50))
+                        .unitPrice(BigDecimal.valueOf(50))
                         .build()))
                 .build();
 
@@ -80,10 +83,10 @@ class PurchaseHistoryServiceImplTest {
 
         PurchaseHistoryDTO dto = PurchaseHistoryDTO.builder()
                 .orderId(order.getId())
-                .orderDate(order.getOrderDate())
+                .orderDate(order.getCreatedAt())
                 .totalAmount(order.getTotalAmount())
                 .paymentMethod(order.getPaymentMethod())
-                .orderStatus(order.getStatus())
+                .orderStatus(order.getOrderStatus())
                 .items(List.of(OrderItemDTO.builder()
                         .productName("Producto 1")
                         .quantity(2)
