@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -26,6 +27,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,7 +50,6 @@ class PurchaseHistoryControllerTest {
 
     @Test
     void testGetPurchaseHistoryByCustomerId() throws Exception {
-        Pageable pageable = PageRequest.of(0, 10);
         PurchaseHistoryDTO dto = PurchaseHistoryDTO.builder()
                 .orderId(1L)
                 .orderDate(LocalDateTime.now())
@@ -68,14 +70,16 @@ class PurchaseHistoryControllerTest {
                 .deliveredAt(LocalDateTime.now())
                 .build();
 
-        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(1L,pageable))
-                .thenReturn((Page<PurchaseHistoryDTO>) List.of(dto));
+        Page<PurchaseHistoryDTO> page = new PageImpl<>(List.of(dto));
+        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(eq(1L), any(Pageable.class)))
+                .thenReturn(page);
 
-        mockMvc.perform(get("/api/purchase-history/customer/1").with(csrf())
+        mockMvc.perform(get("/api/purchase-history/1").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].orderId").value(1))
-                .andExpect(jsonPath("$[0].items[0].productName").value("Producto X"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].orderId").value(1))
+                .andExpect(jsonPath("$.content[0].items[0].productName").value("Producto X"));
     }
+
 }
