@@ -1,78 +1,82 @@
-# 🧩 Plantilla Backend Java · Spring Boot
 
-Este proyecto es una plantilla **completa y profesional** para construir APIs REST seguras y escalables con **Java 21 y Spring Boot 3**.
+# 🛍️ Nova Store App - Backend
 
-Fue desarrollada como base sólida para futuros proyectos y demuestra dominio de buenas prácticas de desarrollo backend, seguridad, arquitectura por capas, testing, documentación y más.
+Este proyecto es un backend completo para un sistema de e-commerce, desarrollado con Java y Spring Boot. Incluye gestión de usuarios, productos, órdenes, pagos, carritos de compra, reviews, historial de compras y más.
 
----
+## 🚀 Tecnologías Utilizadas
 
-## 💼 Tecnologías principales
-
-- **Java 21** + **Spring Boot 3.2**
-- **Spring Security** con autenticación vía JWT
-- **Spring Data JPA** + **Hibernate 6**
-- **Flyway** para migraciones automáticas de base de datos
-- **PostgreSQL** como base de datos principal
-- **Docker Compose** para entorno local
-- **Swagger / OpenAPI** para documentación automática
-- **JUnit 5**, **Mockito** y pruebas de integración
-
----
-
-## ✅ Funcionalidades implementadas
-
-🔐 **Seguridad:**
-- Login y protección de endpoints con JWT
-- Configuración personalizada de filtros de seguridad
-
-📄 **Documentación técnica:**
-- Swagger UI en `/swagger-ui.html` con anotaciones OpenAPI
-
-📦 **Persistencia:**
-- PostgreSQL + JPA + migraciones Flyway
-- Entidades auditadas (createdAt, updatedAt)
-
-🧪 **Testing:**
-- Unit tests para servicios y controladores
-- Tests de integración sobre controladores reales
-
-📂 **Arquitectura limpia:**
-- Separación clara en capas: Controller – Service – Repository – DTO – Mapper
-- Excepciones personalizadas y manejo global con `@ControllerAdvice`
-
-⚙️ **Extras:**
-- Paginación y ordenamiento con `Pageable`
-- Docker para facilitar entorno local
-- DevTools para desarrollo en caliente
-
----
-
-## 👨‍💻 Objetivo del proyecto
-
-> Diseñar una plantilla base **lista para producción** que pueda usarse como punto de partida en cualquier aplicación empresarial basada en Spring Boot.  
-> Al mismo tiempo, mostrar experiencia sólida en desarrollo backend Java moderno.
-
----
-
-## 🚀 Cómo ejecutar el proyecto
-
-Requisitos:
 - Java 21
-- Docker
-- Maven Wrapper (`./mvnw`)
+- Spring Boot 3
+- Spring Data JPA
+- Spring Security (JWT)
+- Hibernate
+- MySQL
+- Maven
+- Swagger (OpenAPI)
+- Docker (opcional para despliegue)
+- JUnit & Mockito (tests)
 
-Pasos:
+## 🧩 Módulos Principales
+
+- **User & Role**: Registro, login, autenticación JWT y autorización.
+- **Product & Category**: CRUD con paginación, stock, imágenes, descripciones.
+- **Customer**: Perfil del cliente y datos personales.
+- **Order & OrderItem**: Gestión de pedidos y sus ítems.
+- **Payment**: Métodos y estado de pagos con enums.
+- **Shipping**: Estado y detalles del envío.
+- **ShoppingCart & CartItem**: Carrito persistente por usuario.
+- **Invoice**: Generación de facturas por orden.
+- **Review**: Opiniones y valoraciones de productos.
+- **Wishlist**: Lista de deseos de cada cliente.
+- **Purchase History**: Consulta de historial de compras.
+
+## 📂 Estructura del Proyecto
+
+```
+src/main/java/com/nova/store/
+├── controllers/         # Controladores REST
+├── services/            # Interfaces de servicios
+├── services/impl/       # Implementaciones de servicios
+├── repositories/        # Repositorios JPA
+├── daos/                # DAOs personalizados
+├── daos/impl/           # Implementaciones DAO
+├── dtos/                # DTOs (Request / Response)
+├── entities/            # Entidades JPA
+├── mappers/             # Mappers con MapStruct
+└── config/              # Seguridad, Swagger, etc.
+```
+
+## ✅ Funcionalidades Clave
+
+- Seguridad con JWT y roles.
+- Validaciones con Jakarta.
+- Documentación Swagger lista para usar.
+- DTOs desacoplados de entidades.
+- Servicios separados de lógica.
+- Paginación en endpoints.
+- Tests unitarios y de integración.
+
+## 📦 Cómo Ejecutar
+
+1. Clonar el repositorio
+2. Crear base de datos `nova_store`
+3. Configurar `application.yml`
+4. Ejecutar con Maven o desde tu IDE
 
 ```bash
-# 1. Clonar el proyecto
-git clone https://github.com/AlePrimo/Plantilla-Backend.git
-cd Plantilla-Backend
+mvn spring-boot:run
+```
 
-# 2. Levantar base de datos
-docker-compose up -d
+## 🧪 Tests
 
-# 3. Ejecutar backend
-./mvnw spring-boot:run
+```bash
+mvn test
+```
 
-# 4. Acceder a Swagger UI
-http://localhost:8080/swagger-ui.html
+## 📄 Licencia
+
+MIT
+
+---
+
+Desarrollado por [Alejandro Primo]
