@@ -41,4 +41,9 @@ public class ShippingDAOImpl implements ShippingDAO {
     public boolean existById(Long id) {
         return shippingRepository.existsById(id);
     }
+
+    @Override
+    public Optional<Shipping> findByOrderId(Long orderId) {
+        return shippingRepository.findByOrderId(orderId);
+    }
 }

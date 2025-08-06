@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class PurchaseHistoryMapper {
 
-    public static PurchaseHistoryDTO toDTO(Order order, Shipping shipping) {
+    public  PurchaseHistoryDTO toDTO(Order order, Shipping shipping) {
         return PurchaseHistoryDTO.builder()
                 .orderId(order.getId())
                 .orderDate(order.getCreatedAt())

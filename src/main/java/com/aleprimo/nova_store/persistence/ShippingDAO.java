@@ -13,4 +13,5 @@ public interface ShippingDAO {
     Page<Shipping> findAll(Pageable pageable);
     void deleteById(Long id);
     boolean existById(Long id);
+    Optional<Shipping> findByOrderId(Long orderId);
 }

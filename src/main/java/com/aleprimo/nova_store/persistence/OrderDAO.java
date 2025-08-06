@@ -12,4 +12,5 @@ public interface OrderDAO {
     Optional<Order> findById(Long id);
     Page<Order> findAll(Pageable pageable);
     void deleteById(Long id);
+    Page<Order> findByCustomerId(Long id, Pageable pageable);
 }

@@ -14,7 +14,11 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 
@@ -23,10 +27,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PurchaseHistoryController.class)
+@ActiveProfiles("test")
+@WithMockUser(roles = "ADMIN")
 class PurchaseHistoryControllerTest {
 
     @Resource
@@ -40,6 +47,7 @@ class PurchaseHistoryControllerTest {
 
     @Test
     void testGetPurchaseHistoryByCustomerId() throws Exception {
+        Pageable pageable = PageRequest.of(0, 10);
         PurchaseHistoryDTO dto = PurchaseHistoryDTO.builder()
                 .orderId(1L)
                 .orderDate(LocalDateTime.now())
@@ -60,10 +68,10 @@ class PurchaseHistoryControllerTest {
                 .deliveredAt(LocalDateTime.now())
                 .build();
 
-        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(1L))
+        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(1L,pageable))
                 .thenReturn((Page<PurchaseHistoryDTO>) List.of(dto));
 
-        mockMvc.perform(get("/api/purchase-history/customer/1")
+        mockMvc.perform(get("/api/purchase-history/customer/1").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))

@@ -40,4 +40,9 @@ public class OrderDAOImpl implements OrderDAO {
     public void deleteById(Long id) {
         orderRepository.deleteById(id);
     }
+
+    @Override
+    public Page<Order> findByCustomerId(Long id, Pageable pageable) {
+        return orderRepository.findByCustomerId(id,pageable);
+    }
 }
