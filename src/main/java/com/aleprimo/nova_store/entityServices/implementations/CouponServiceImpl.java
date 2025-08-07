@@ -16,24 +16,25 @@ import org.springframework.stereotype.Service;
 public class CouponServiceImpl implements CouponService {
 
     private final CouponDAO couponDAO;
+    private final CouponMapper couponMapper;
 
     @Override
     public CouponResponseDTO create(CouponRequestDTO dto) {
-        Coupon saved = couponDAO.save(CouponMapper.toEntity(dto));
-        return CouponMapper.toDTO(saved);
+        Coupon saved = couponDAO.save(couponMapper.toEntity(dto));
+        return couponMapper.toDTO(saved);
     }
 
     @Override
     public CouponResponseDTO getById(Long id) {
         return couponDAO.findById(id)
-                .map(CouponMapper::toDTO)
+                .map(couponMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
     }
 
     @Override
     public CouponResponseDTO getByCode(String code) {
         return couponDAO.findByCode(code)
-                .map(CouponMapper::toDTO)
+                .map(couponMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
     }
 
@@ -44,6 +45,6 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Page<CouponResponseDTO> getAll(Pageable pageable) {
-        return couponDAO.findAll(pageable).map(CouponMapper::toDTO);
+        return couponDAO.findAll(pageable).map(couponMapper::toDTO);
     }
 }

@@ -1,11 +1,12 @@
 package com.aleprimo.nova_store.service;
 
-import com.novastore.dao.CouponDAO;
-import com.novastore.dto.request.CouponRequestDTO;
-import com.novastore.dto.response.CouponResponseDTO;
-import com.novastore.entity.Coupon;
-import com.novastore.mapper.CouponMapper;
-import com.novastore.service.CouponService;
+
+import com.aleprimo.nova_store.controller.mappers.CouponMapper;
+import com.aleprimo.nova_store.dto.coupon.CouponRequestDTO;
+import com.aleprimo.nova_store.dto.coupon.CouponResponseDTO;
+import com.aleprimo.nova_store.entityServices.implementations.CouponServiceImpl;
+import com.aleprimo.nova_store.models.Coupon;
+import com.aleprimo.nova_store.persistence.CouponDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,26 +42,23 @@ class CouponServiceImplTest {
         coupon = Coupon.builder()
                 .id(1L)
                 .code("DISCOUNT10")
-                .description("10% off")
-                .discountPercentage(BigDecimal.valueOf(10))
-                .expirationDate(LocalDate.now().plusDays(5))
+                .discountPercentage(10.0)
+                .expirationDate(LocalDateTime.now().plusDays(5))
                 .isActive(true)
                 .build();
 
         requestDTO = CouponRequestDTO.builder()
                 .code("DISCOUNT10")
-                .description("10% off")
-                .discountPercentage(BigDecimal.valueOf(10))
-                .expirationDate(LocalDate.now().plusDays(5))
+                .discountPercentage(10.0)
+                .expirationDate(LocalDateTime.now().plusDays(5))
                 .isActive(true)
                 .build();
 
         responseDTO = CouponResponseDTO.builder()
                 .id(1L)
                 .code("DISCOUNT10")
-                .description("10% off")
-                .discountPercentage(BigDecimal.valueOf(10))
-                .expirationDate(LocalDate.now().plusDays(5))
+                .discountPercentage(10.0)
+                .expirationDate(LocalDateTime.now().plusDays(5))
                 .isActive(true)
                 .build();
     }
@@ -70,7 +69,7 @@ class CouponServiceImplTest {
         when(couponDAO.save(coupon)).thenReturn(coupon);
         when(couponMapper.toDTO(coupon)).thenReturn(responseDTO);
 
-        CouponResponseDTO result = couponService.save(requestDTO);
+        CouponResponseDTO result = couponService.create(requestDTO);
 
         assertThat(result).isNotNull();
         assertThat(result.getCode()).isEqualTo("DISCOUNT10");
@@ -81,7 +80,7 @@ class CouponServiceImplTest {
         when(couponDAO.findById(1L)).thenReturn(Optional.of(coupon));
         when(couponMapper.toDTO(coupon)).thenReturn(responseDTO);
 
-        CouponResponseDTO result = couponService.findById(1L);
+        CouponResponseDTO result = couponService.getById(1L);
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
     }
@@ -99,7 +98,7 @@ class CouponServiceImplTest {
         when(couponDAO.findAll(pageable)).thenReturn(page);
         when(couponMapper.toDTO(any(Coupon.class))).thenReturn(responseDTO);
 
-        Page<CouponResponseDTO> result = couponService.findAll(pageable);
+        Page<CouponResponseDTO> result = couponService.getAll(pageable);
         assertThat(result.getContent()).hasSize(1);
     }
 }

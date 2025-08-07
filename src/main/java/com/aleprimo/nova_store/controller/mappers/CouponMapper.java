@@ -6,7 +6,7 @@ import com.aleprimo.nova_store.models.Coupon;
 
 public class CouponMapper {
 
-    public static Coupon toEntity(CouponRequestDTO dto) {
+    public  Coupon toEntity(CouponRequestDTO dto) {
         return Coupon.builder()
                 .code(dto.getCode())
                 .discountPercentage(dto.getDiscountPercentage())
@@ -15,7 +15,7 @@ public class CouponMapper {
                 .build();
     }
 
-    public static CouponResponseDTO toDTO(Coupon coupon) {
+    public  CouponResponseDTO toDTO(Coupon coupon) {
         return CouponResponseDTO.builder()
                 .id(coupon.getId())
                 .code(coupon.getCode())
