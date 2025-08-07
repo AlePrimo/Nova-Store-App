@@ -20,8 +20,8 @@ public class CouponController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CouponResponseDTO> create(@Valid @RequestBody CouponRequestDTO dto) {
-        return ResponseEntity.ok(couponService.create(dto));
+    public CouponResponseDTO create(@Valid @RequestBody CouponRequestDTO dto) {
+        return couponService.create(dto);
     }
 
     @GetMapping("/{id}")
