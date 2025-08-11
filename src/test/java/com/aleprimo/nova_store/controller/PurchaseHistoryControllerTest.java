@@ -69,17 +69,32 @@ class PurchaseHistoryControllerTest {
                 .shippedAt(LocalDateTime.now().minusDays(3))
                 .deliveredAt(LocalDateTime.now())
                 .build();
-
+        Pageable pageable = PageRequest.of(0, 10);
         Page<PurchaseHistoryDTO> page = new PageImpl<>(List.of(dto));
-        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(eq(1L), any(Pageable.class)))
+
+        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(1L, pageable))
                 .thenReturn(page);
 
-        mockMvc.perform(get("/api/purchase-history/1").with(csrf())
+// en el perform
+        mockMvc.perform(get("/api/purchase-history/1")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .with(csrf()) // si tu config lo requiere
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].orderId").value(1))
                 .andExpect(jsonPath("$.content[0].items[0].productName").value("Producto X"));
+//        Page<PurchaseHistoryDTO> page = new PageImpl<>(List.of(dto));
+//        when(purchaseHistoryService.getPurchaseHistoryByCustomerId(eq(1L), any(Pageable.class)))
+//                .thenReturn(page);
+//
+//        mockMvc.perform(get("/api/purchase-history/1").with(csrf())
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.content.length()").value(1))
+//                .andExpect(jsonPath("$.content[0].orderId").value(1))
+//                .andExpect(jsonPath("$.content[0].items[0].productName").value("Producto X"));
     }
 
 }
