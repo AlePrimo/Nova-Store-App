@@ -22,7 +22,7 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -82,7 +82,8 @@ class WishlistServiceImplTest {
     @Test
     void create_ShouldReturnWishlistResponseDTO() {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-        when(productRepository.findAllById(List.of(1L))).thenReturn(products);
+        when(productRepository.findAllById(anyIterable())).thenReturn(products);
+
         when(wishlistMapper.toEntity(requestDTO, customer, products)).thenReturn(wishlist);
         when(wishlistDAO.save(wishlist)).thenReturn(wishlist);
         when(wishlistMapper.toDTO(wishlist)).thenReturn(responseDTO);
