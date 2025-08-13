@@ -22,42 +22,45 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "Controlador de Categorías", description = "Operaciones CRUD sobre categorías de productos")
+@Tag(name = "Categorías", description = "Operaciones CRUD sobre categorías de productos")
 public class CategoryController {
 
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
 
-    @Operation(summary = "Crear una nueva categoría")
+    @Operation(summary = "Crear una nueva categoría", description = "Permite registrar una nueva categoría de productos.")
     @ApiResponse(responseCode = "201", description = "Categoría creada correctamente")
+    @ApiResponse(responseCode = "400", description = "Datos inválidos en la solicitud")
     @PostMapping("/create")
     public ResponseEntity<CategoryResponseDTO> create(@RequestBody @Validated CategoryRequestDTO dto) {
         CategoryResponseDTO created = categoryService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @Operation(summary = "Listar todas las categorías con paginación")
-    @ApiResponse(responseCode = "200", description = "Página de categorías obtenida correctamente")
+
+    @Operation(summary = "Listar todas las categorías", description = "Devuelve una lista paginada de todas las categorías.")
+    @ApiResponse(responseCode = "200", description = "Lista de categorías obtenida correctamente")
     @GetMapping("/all")
     public ResponseEntity<Page<CategoryResponseDTO>> getAll(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(categoryService.getAll(pageable));
     }
 
-    @Operation(summary = "Listar solo las categorías activas con paginación")
-    @ApiResponse(responseCode = "200", description = "Página de categorías activas obtenida correctamente")
+    @Operation(summary = "Listar categorías activas", description = "Devuelve una lista paginada de categorías que están activas.")
+    @ApiResponse(responseCode = "200", description = "Lista de categorías activas obtenida correctamente")
     @GetMapping("/active")
     public ResponseEntity<Page<CategoryResponseDTO>> getActive(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(categoryService.getActive(pageable));
     }
 
-    @Operation(summary = "Buscar una categoría por su ID")
+    @Operation(summary = "Buscar categoría por ID", description = "Devuelve la información de una categoría específica.")
     @ApiResponse(responseCode = "200", description = "Categoría encontrada")
+    @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     @GetMapping("/id/{id}")
     public ResponseEntity<CategoryResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getById(id));
     }
 
-    @Operation(summary = "Buscar categorías por nombre (contiene)")
+    @Operation(summary = "Buscar categorías por nombre", description = "Busca categorías cuyo nombre contenga el texto indicado.")
     @ApiResponse(responseCode = "200", description = "Lista de categorías coincidentes")
     @GetMapping("/search")
     public ResponseEntity<List<CategoryResponseDTO>> searchByName(
@@ -66,8 +69,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.searchByName(name));
     }
 
-    @Operation(summary = "Actualizar una categoría existente")
+    @Operation(summary = "Actualizar categoría", description = "Permite modificar los datos de una categoría existente.")
     @ApiResponse(responseCode = "200", description = "Categoría actualizada correctamente")
+    @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     @PutMapping("/update/{id}")
     public ResponseEntity<CategoryResponseDTO> update(
             @PathVariable Long id,
@@ -76,8 +80,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.update(id, dto));
     }
 
-    @Operation(summary = "Eliminar una categoría por ID")
+    @Operation(summary = "Eliminar categoría", description = "Elimina una categoría por su ID.")
     @ApiResponse(responseCode = "204", description = "Categoría eliminada correctamente")
+    @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);
