@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "Categorías", description = "Operaciones CRUD sobre categorías de productos")
+@Tag(name = "Controlador de Categorías", description = "Operaciones CRUD sobre categorías de productos")
 public class CategoryController {
 
     private final CategoryService categoryService;

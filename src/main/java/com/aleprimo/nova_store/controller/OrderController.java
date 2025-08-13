@@ -6,6 +6,7 @@ import com.aleprimo.nova_store.dto.order.OrderResponseDTO;
 import com.aleprimo.nova_store.entityServices.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+@Tag(name = "Controlador de Ordenes", description = "Operaciones CRUD sobre Ordenes")
 public class OrderController {
 
     private final OrderService orderService;

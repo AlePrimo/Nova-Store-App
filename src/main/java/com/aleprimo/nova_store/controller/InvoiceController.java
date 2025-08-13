@@ -5,6 +5,7 @@ import com.aleprimo.nova_store.dto.invoice.InvoiceResponseDTO;
 
 import com.aleprimo.nova_store.entityServices.InvoiceService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/invoices")
 @RequiredArgsConstructor
+@Tag(name = "Controlador para Facturas", description = "CRUD para gestion de Facturas")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;

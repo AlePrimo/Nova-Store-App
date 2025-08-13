@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/addresses")
 @RequiredArgsConstructor
-@Tag(name = "Adress Controller", description = "CRUD de Adress")
+@Tag(name = "Controlador para Direcciones", description = "CRUD para gestion de Direcciones")
 public class AddressController {
 
     private final AddressService addressService;

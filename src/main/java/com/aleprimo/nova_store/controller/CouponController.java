@@ -3,6 +3,7 @@ package com.aleprimo.nova_store.controller;
 import com.aleprimo.nova_store.dto.coupon.CouponRequestDTO;
 import com.aleprimo.nova_store.dto.coupon.CouponResponseDTO;
 import com.aleprimo.nova_store.entityServices.CouponService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/coupons")
 @RequiredArgsConstructor
+@Tag(name = "🧾 Cupones", description = "CRUD para gestión de cupones")
 public class CouponController {
 
     private final CouponService couponService;
