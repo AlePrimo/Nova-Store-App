@@ -3,7 +3,9 @@ package com.aleprimo.nova_store.controller.mappers;
 import com.aleprimo.nova_store.dto.coupon.CouponRequestDTO;
 import com.aleprimo.nova_store.dto.coupon.CouponResponseDTO;
 import com.aleprimo.nova_store.models.Coupon;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CouponMapper {
 
     public  Coupon toEntity(CouponRequestDTO dto) {
