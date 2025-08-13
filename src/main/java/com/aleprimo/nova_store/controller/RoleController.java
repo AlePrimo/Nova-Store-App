@@ -23,14 +23,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
-@Tag(name = "Controlador de Roles", description = "Operaciones CRUD sobre roles de usuario")
+@Tag(name = "Roles", description = "Operaciones CRUD sobre roles de usuario")
 public class RoleController {
 
     private final RoleService roleService;
     private final RoleMapper roleMapper;
 
-    @Operation(summary = "Crear un nuevo rol")
-    @ApiResponse(responseCode = "201", description = "Rol creado correctamente")
+    @Operation(summary = "Crear rol", description = "Registra un nuevo rol en el sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Rol creado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos en la solicitud")
+    })
     @PostMapping("/create")
     public ResponseEntity<RoleDTO> createRole(@Valid @RequestBody RoleDTO roleDTO) {
         Role role = roleMapper.toEntity(roleDTO);
@@ -38,8 +41,8 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleMapper.toDto(saved));
     }
 
-    @Operation(summary = "Obtener un rol por ID")
-    @ApiResponses(value = {
+    @Operation(summary = "Obtener rol por ID", description = "Devuelve un rol específico por su ID.")
+    @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Rol encontrado"),
             @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
@@ -51,8 +54,9 @@ public class RoleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Obtener un rol por nombre")
-    @ApiResponses(value = {
+
+    @Operation(summary = "Obtener rol por nombre", description = "Devuelve un rol específico por su nombre.")
+    @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Rol encontrado"),
             @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
@@ -63,7 +67,7 @@ public class RoleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Listar todos los roles")
+    @Operation(summary = "Listar roles", description = "Devuelve una lista con todos los roles.")
     @ApiResponse(responseCode = "200", description = "Lista de roles obtenida correctamente")
     @GetMapping("/all")
     public ResponseEntity<List<RoleDTO>> getAllRoles() {
@@ -74,8 +78,8 @@ public class RoleController {
         return ResponseEntity.ok(roles);
     }
 
-    @Operation(summary = "Eliminar un rol por ID")
-    @ApiResponses(value = {
+    @Operation(summary = "Eliminar rol", description = "Elimina un rol por su ID.")
+    @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Rol eliminado correctamente"),
             @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
