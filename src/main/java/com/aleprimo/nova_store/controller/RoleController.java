@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
-@Tag(name = "Roles", description = "Operaciones CRUD sobre roles de usuario")
+@Tag(name = "Controlador de Roles", description = "Operaciones CRUD sobre roles de usuario")
 public class RoleController {
 
     private final RoleService roleService;
@@ -44,6 +44,7 @@ public class RoleController {
             @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
     @GetMapping("/id/{id}")
+
     public ResponseEntity<RoleDTO> getRoleById(@PathVariable Long id) {
         return roleService.findById(id)
                 .map(role -> ResponseEntity.ok(roleMapper.toDto(role)))

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
-@Tag(name = "Productos", description = "Operaciones CRUD sobre productos")
+@Tag(name = "Controlador de Productos", description = "Operaciones CRUD sobre productos")
 public class ProductController {
 
     private final ProductService productService;

@@ -17,37 +17,37 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/wishlists")
 @RequiredArgsConstructor
-@Tag(name = "Wishlist Controller", description = "Wishlist management endpoints")
+@Tag(name = "Controllador de Lista de Deseos", description = "Operaciones CRUD sobre una Lista de Deseos")
 public class WishlistController {
 
     private final WishlistService wishlistService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a wishlist")
+    @Operation(summary = "Crear una Lista de deseos")
     public WishlistResponseDTO create(@Valid @RequestBody WishlistRequestDTO dto) {
         return wishlistService.create(dto);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get wishlist by ID")
+    @Operation(summary = "Obtener una lista de deseos por su Id")
     public WishlistResponseDTO getById(@PathVariable Long id) {
         return wishlistService.getById(id);
     }
 
     @GetMapping
-    @Operation(summary = "Get all wishlists (paginated)")
+    @Operation(summary = "Obtener todas las listas de deseos(con paginacion)")
     public org.springframework.data.domain.Page<WishlistResponseDTO> getAll(@ParameterObject Pageable pageable) {
         return wishlistService.getAll(pageable);
     }
-    @Operation(summary = "Update a wishlist by ID")
+    @Operation(summary = "Actualizar una lista de deseos")
     @PutMapping("/{id}")
     public ResponseEntity<WishlistResponseDTO> updateWishlist(@PathVariable Long id, @Valid @RequestBody WishlistRequestDTO requestDTO) {
         return ResponseEntity.ok(wishlistService.updateWishlist(id, requestDTO));
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete wishlist by ID")
+    @Operation(summary = "Eliminar una lista de deseos")
     public void delete(@PathVariable Long id) {
         wishlistService.delete(id);
     }

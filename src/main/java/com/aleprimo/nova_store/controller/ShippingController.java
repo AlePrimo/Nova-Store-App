@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/shippings")
 @RequiredArgsConstructor
-@Tag(name = "Shipping", description = "Gestión de envíos")
+@Tag(name = "Controlador de Envios", description = "Operaciones CRUD sobre Envios")
 public class ShippingController {
 
     private final ShippingService shippingService;

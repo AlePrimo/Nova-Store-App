@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Purchase History", description = "Endpoints for retrieving purchase history")
+@Tag(name = "Controlador de Historial de Compra", description = "Endpoint para obtener el historial de compra de un cliente")
 @RestController
 @RequestMapping("/api/purchase-history")
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class PurchaseHistoryController {
 
     private final PurchaseHistoryService purchaseHistoryService;
 
-    @Operation(summary = "Get purchase history by customer ID")
+    @Operation(summary = "Obtener el historial de compra de un cliente por su Id")
     @GetMapping("/{customerId}")
     public ResponseEntity<Page<PurchaseHistoryDTO>> getPurchaseHistoryByCustomerId(
             @PathVariable Long customerId,
