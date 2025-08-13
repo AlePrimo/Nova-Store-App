@@ -19,32 +19,32 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
 
-    @Operation(summary = "List all invoices (paginated)")
+    @Operation(summary = "Listar todas las facturas (con paginacion)")
     @GetMapping
     public ResponseEntity<?> findAll(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(invoiceService.getAllInvoices(pageable));
     }
 
-    @Operation(summary = "Get an invoice by ID")
+    @Operation(summary = "Obtener una factura por su Id")
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(invoiceService.getInvoiceById(id));
     }
 
-    @Operation(summary = "Create a new invoice")
+    @Operation(summary = "Generar una nueva factura")
     @PostMapping
     public ResponseEntity<InvoiceResponseDTO> create(@Valid @RequestBody InvoiceRequestDTO dto) {
         return ResponseEntity.status(201).body(invoiceService.createInvoice(dto));
     }
 
-    @Operation(summary = "Update an invoice")
+    @Operation(summary = "Actualizar una factura")
     @PutMapping("/{id}")
     public ResponseEntity<InvoiceResponseDTO> update(@PathVariable Long id,
                                                      @Valid @RequestBody InvoiceRequestDTO dto) {
         return ResponseEntity.ok(invoiceService.update(id, dto));
     }
 
-    @Operation(summary = "Delete an invoice")
+    @Operation(summary = "Borrar una factura")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);
