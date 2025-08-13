@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "DTO de respuesta de una review")
 public class ReviewResponseDTO {
 
     @Schema(description = "ID único de la review", example = "1")
