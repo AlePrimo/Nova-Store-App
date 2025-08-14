@@ -5,6 +5,8 @@ import com.aleprimo.nova_store.dto.shoppingCartItem.ShoppingCartItemRequestDTO;
 import com.aleprimo.nova_store.dto.shoppingCartItem.ShoppingCartItemResponseDTO;
 import com.aleprimo.nova_store.entityServices.ShoppingCartItemService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,37 +18,56 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/cart-items")
 @RequiredArgsConstructor
-@Tag(name = "Controlador de Item de Carrito de Compras", description = "Operaciones CRUD  de Items de  carritos de compra")
+@Tag(name = " Items de Carrito de Compras", description = "Operaciones CRUD de Items de carritos de compra")
 public class ShoppingCartItemController {
 
     private final ShoppingCartItemService shoppingCartItemService;
 
+
     @Operation(summary = "Obtener todos los items de un carrito de compras")
+    @ApiResponse(responseCode = "200", description = "Lista de items obtenida correctamente")
     @GetMapping
     public ResponseEntity<?> findAll(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(shoppingCartItemService.getAllItems(pageable));
     }
 
+
     @Operation(summary = "Obtener un item de un carrito por su Id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Item encontrado"),
+            @ApiResponse(responseCode = "404", description = "Item no encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ShoppingCartItemResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(shoppingCartItemService.getItemById(id));
     }
 
     @Operation(summary = "Crear un nuevo item de carrito")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Item creado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos en la solicitud")
+    })
     @PostMapping("/create")
     public ResponseEntity<ShoppingCartItemResponseDTO> create(@Valid @RequestBody ShoppingCartItemRequestDTO dto) {
         return ResponseEntity.status(201).body(shoppingCartItemService.addItemToCart(dto));
     }
 
     @Operation(summary = "Actualizar un item")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Item actualizado correctamente"),
+            @ApiResponse(responseCode = "404", description = "Item no encontrado")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ShoppingCartItemResponseDTO> update(@PathVariable Long id,
                                                               @Valid @RequestBody ShoppingCartItemRequestDTO dto) {
         return ResponseEntity.ok(shoppingCartItemService.update(id, dto));
     }
 
-    @Operation(summary = "Borra un item de carrito")
+    @Operation(summary = "Borrar un item de carrito")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Item eliminado correctamente"),
+            @ApiResponse(responseCode = "404", description = "Item no encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         shoppingCartItemService.deleteItem(id);
