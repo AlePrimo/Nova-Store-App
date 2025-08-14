@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "Controlador de Usuarios", description = "Operaciones CRUD sobre usuarios")
+@Tag(name = "Usuarios", description = "Operaciones CRUD sobre usuarios")
 public class UserController {
 
     private final UserService userService;
